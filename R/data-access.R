@@ -37,8 +37,8 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
   #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0"}]
 
 
-  if (!is.character(product_id) & !is.integer(product_id)) {
-    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  if (!is.character(product_id) & !is.numeric(product_id)) {
+    stop(paste0("Product ID must be a character or numeric vector"), call. = FALSE)
   } # return actual class in message
 
   if (!grepl("^[0-9]+$", product_id)) {
@@ -46,7 +46,7 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
   } # return actual class in message
 
   if (!is.character(coordinate)) {
-    stop(paste0("Cooedinate must be a string"), call. = FALSE)
+    stop(paste0("Coordinate must be a string"), call. = FALSE)
   }
 
   body <- paste0('[{"productId":', product_id, ',"coordinate":,"', coordinate, '}]')
@@ -88,8 +88,8 @@ getChangedSeriesDataFromVector <- function(vector_id) {
   #   [{"vectorId":32164132}]
   #
 
-  if (!is.character(vector_id) & !is.integer(vector_id)) {
-    stop(paste0("Vector must be a character or integer vector."), call. = FALSE)
+  if (!is.character(vector_id) & !is.numeric(vector_id)) {
+    stop(paste0("Vector must be a character or numeric vector."), call. = FALSE)
   } # return actual class in message
 
   if (!grepl("^v?[0-9]+$", vector_id)) {
@@ -147,20 +147,20 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, per
   #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0", "latestN":3}]
   #
 
-  if (!is.character(product_id) & !is.integer(product_id)) {
-    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  if (!is.character(product_id) & !is.numeric(product_id)) {
+    stop(paste0("Product ID must be a character or numeric vector"), call. = FALSE)
   } # return actual class in message
 
   if (!grepl("^[0-9]+$", product_id)) {
     stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
   } # return actual class in message
 
-  if (!is.integer(periods) | periods > 0) {
+  if (!is.numeric(periods) | periods > 0) {
     stop(paste0("Period must be an integer > 0"), call. = FALSE)
   }
 
   if (!is.character(coordinate)) {
-    stop(paste0("Cooedinate must be a string"), call. = FALSE)
+    stop(paste0("Coordinate must be a string"), call. = FALSE)
   }
 
   body <- paste0('[{"productId":', product_id,
@@ -208,15 +208,15 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
   # POST BODY:
   #   [{"vectorId":32164132, "latestN":3}]
 
-  if (!is.character(vector_id) & !is.integer(vector_id)) {
-    stop(paste0("Vector must be a character or integer vector."), call. = FALSE)
+  if (!is.character(vector_id) & !is.numeric(vector_id)) {
+    stop(paste0("Vector must be a character or numeric vector."), call. = FALSE)
   } # return actual class in message
 
   if (!grepl("^v?[0-9]+$", vector_id)) {
     stop(paste0("Vector ID must be an integer >= 0"), call. = FALSE)
   } # return actual class in message
 
-  if (!is.integer(periods) | periods > 0) {
+  if (!is.numeric(periods) | periods > 0) {
     stop(paste0("Period must be an integer > 0"), call. = FALSE)
   }
 
@@ -275,8 +275,8 @@ getBulkVectorDataByRange <- function(vector_ids,
   #   }
 
 
-  if (!is.character(vector_ids) & !is.integer(vector_ids)) {
-    stop(paste0("Vectors must be a character or integer vector."), call. = FALSE)
+  if (!is.character(vector_ids) & !is.numeric(vector_ids)) {
+    stop(paste0("Vectors must be a character or numeric vector."), call. = FALSE)
   } # return actual class in message
 
   if (!all(grepl("^v?[0-9]+$", vector_ids))) {
@@ -296,7 +296,7 @@ getBulkVectorDataByRange <- function(vector_ids,
     '"'
   )
 
-  body <- paste0('[', vectors_args, times_args, ']')
+  body <- paste0('{', vectors_args, ',', times_args, '}')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getBulkVectorDataByRange",
@@ -311,7 +311,8 @@ getBulkVectorDataByRange <- function(vector_ids,
 
 #' Get full table download link in CSV format
 #'
-#' Get cube/table titles, product ID, CANSIM ID, release date, and more.
+#' A direct link to download the table in CSV format. This functiom
+#' does not actually download the table itself.
 #'
 #' @param product_id Product Identification number (PID) is a unique product
 #' identifier for all Statistics Canada products, including large
@@ -341,8 +342,8 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
   #     "object": "https://www150.statcan.gc.ca/n1/tbl/csv/14100287-eng.zip"
   #   }
 
-  if (!is.character(product_id) & !is.integer(product_id)) {
-    stop(paste0("Product ID must be a character or integer vector."), call. = FALSE)
+  if (!is.character(product_id) & !is.numeric(product_id)) {
+    stop(paste0("Product ID must be a character or numeric vector."), call. = FALSE)
   } # return actual class in message
 
   if (!all(grepl("^[0-9]+$", product_id))) {
@@ -366,7 +367,8 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 
 #' Get full table download link in SDMX format
 #'
-#' Get cube/table titles, product ID, CANSIM ID, release date, and more.
+#' A direct link to download the table in SDMX format. This functiom
+#' does not actually download the table itself.
 #'
 #' @param product_id Product Identification number (PID) is a unique product
 #' identifier for all Statistics Canada products, including large
@@ -376,7 +378,7 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return A direct link to download the table in SDMX format..
 #'
 #' @examples
 #' \dontrun{
@@ -394,8 +396,8 @@ getFullTableDownloadSDMX <- function(product_id) {
   #     "object": "https://www150.statcan.gc.ca/n1/tbl/sdmx/14100287-SDMX.zip"
   #   }
 
-  if (!is.character(product_id) & !is.integer(product_id)) {
-    stop(paste0("Product ID must be a character or integer vector."), call. = FALSE)
+  if (!is.character(product_id) & !is.numeric(product_id)) {
+    stop(paste0("Product ID must be a character or numeric vector."), call. = FALSE)
   } # return actual class in message
 
   if (!all(grepl("^[0-9]+$", product_id))) {

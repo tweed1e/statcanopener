@@ -1,15 +1,15 @@
 
 context("test-data-access")
 
-test_that("getBulkVectorDataByRange returns an error if vector is not a string or a list of strings", {
+test_that("getBulkVectorDataByRange returns an error if vector is not a string or numeric", {
   expect_error(
-    getBulkVectorDataByRange(vector_ids = function(x) { "hi" }), "must be a character or integer"
+    getBulkVectorDataByRange(vector_ids = function(x) { "hi" }), "must be a character or numeric"
   )
   expect_error(
-    getBulkVectorDataByRange(vector_ids = list("372648")), "must be a character or integer"
+    getBulkVectorDataByRange(vector_ids = list("372648")), "must be a character or numeric"
   )
   expect_error(
-    getBulkVectorDataByRange(vector_ids = data.frame("372648")), "must be a character or integer"
+    getBulkVectorDataByRange(vector_ids = data.frame("372648")), "must be a character or numeric"
   )
 })
 
@@ -39,7 +39,7 @@ test_that("getBulkVectorDataByRange returns the right output format.", {
   # skip_on_cran()
   # skip_if_offline()
   vectors <- c("113413955","113411623")
-  output <- getBulkVectorDataByRange(vector_ids = vectors)
+  output <- getBulkVectorDataByRange(vector_ids = vectors, "2015-01-01", "2015-12-31")
 
   # expect_is(output, "tbl_df")
   # expect_is(output, "tbl")

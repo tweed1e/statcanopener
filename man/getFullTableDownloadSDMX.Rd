@@ -14,10 +14,11 @@ two digits refer to product type, the last four digits refer to the product
 itself.}
 }
 \value{
-A json object.
+A direct link to download the table in SDMX format..
 }
 \description{
-Get cube/table titles, product ID, CANSIM ID, release date, and more.
+A direct link to download the table in SDMX format. This functiom
+does not actually download the table itself.
 }
 \examples{
 \dontrun{

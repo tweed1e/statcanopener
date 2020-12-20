@@ -19,7 +19,10 @@ knitr::opts_chunk$set(
 [![R build status](https://github.com/tweed1e/statcanopener/workflows/R-CMD-check/badge.svg)](https://github.com/tweed1e/statcanopener/actions)
 <!-- badges: end -->
 
-The goal of statcanopener is to ...
+Statcanopener provides a lightweight wrapper for [Statistics 
+Canada's Web Data Service](https://www.statcan.gc.ca/eng/developers/wds). With 
+it, you can build Statcan's API queries into your packages, reporting workflows 
+or Shiny apps.
 
 ## Installation
 
@@ -39,8 +42,21 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(statcanopener)
 
-## basic example code
+# Get metadata for product ID 35100003
+result <- getCubeMetadata(35100003) # returns httr response object
+content <- httr::content(result) # extract content of response
 
-getCubeMetadata(35100003)
-
+str(content[[1]], max.level = 2)
 ```
+
+
+## Related packages
+
+This package was inspired by the [cansim](https://github.com/mountainMath/cansim) package, which includes this functionality
+and much more. This is intended to be a bare bones, non-opinionated wrapper for the 
+web data service, rather than a full-fledged end-user API access package. (E.g., 
+this won't have a function to automatically scale from millions of $ to $.)
+
+
+
+

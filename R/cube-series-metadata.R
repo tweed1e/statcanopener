@@ -26,8 +26,8 @@ getCubeMetadata <- function(product_id) {
   #   [{"productId":35100003}]
 
 
-  if (!is.character(product_id) & !is.integer(product_id)) {
-    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  if (!is.character(product_id) & !is.numeric(product_id)) {
+    stop(paste0("Product ID must be a character or numeric vector"), call. = FALSE)
   } # return actual class in message
 
   if (!grepl("^[0-9]+$", product_id)) {
@@ -122,8 +122,8 @@ getAllCubesListLite <- function() {
 #'
 getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 
-  if (!is.character(product_id) & !is.integer(product_id)) {
-    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  if (!is.character(product_id) & !is.numeric(product_id)) {
+    stop(paste0("Product ID must be a character or numeric vector"), call. = FALSE)
   } # return actual class in message
 
   if (!grepl("^[0-9]+$", product_id)) {
@@ -131,7 +131,7 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
   } # return actual class in message
 
   if (!is.character(coordinate)) {
-    stop(paste0("Cooedinate must be a string"), call. = FALSE)
+    stop(paste0("Coordinate must be a string"), call. = FALSE)
   }
 
   body <- paste0('[{"productId":', product_id, ',"coordinate":,"', coordinate, '}]')
@@ -166,8 +166,8 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #'
 getSeriesInfoFromVector <- function(vector_id) {
 
-  if (!is.character(vector_id) & !is.integer(vector_id)) {
-    stop(paste0("Vector must be a character or integer vector."), call. = FALSE)
+  if (!is.character(vector_id) & !is.numeric(vector_id)) {
+    stop(paste0("Vector must be a character or numeric vector."), call. = FALSE)
   } # return actual class in message
 
   if (!grepl("^v?[0-9]+$", vector_id)) {
