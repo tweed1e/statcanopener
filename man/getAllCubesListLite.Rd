@@ -16,7 +16,7 @@ list of details about each table.  Unlike getAllCubesList, this method does
 not return dimension or footnote information.
 }
 \examples{
-\donttest{
+\dontrun{
 getAllCubesListLite()
 }
 }

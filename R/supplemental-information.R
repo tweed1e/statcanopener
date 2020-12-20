@@ -13,7 +13,7 @@
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getCodeSets()
 #' }
 #'

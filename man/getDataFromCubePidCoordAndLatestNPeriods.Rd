@@ -28,7 +28,7 @@ A json object.
 Get changed series data given a product ID and coordinate
 }
 \examples{
-\donttest{
+\dontrun{
 getDataFromCubePidCoordAndLatestNPeriods(35100003, "1.12.0.0.0.0.0.0.0.0", 10)
 }
 

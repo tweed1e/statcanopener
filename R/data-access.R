@@ -24,7 +24,7 @@
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getChangedSeriesDataFromCubePidCoord(35100003, "1.12.0.0.0.0.0.0.0.0")
 #' }
 #'
@@ -73,7 +73,7 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getChangedSeriesDataFromVector("74804")
 #' getChangedSeriesDataFromVector("v74804")
 #' getChangedSeriesDataFromVector(74804)
@@ -134,7 +134,7 @@ getChangedSeriesDataFromVector <- function(vector_id) {
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getDataFromCubePidCoordAndLatestNPeriods(35100003, "1.12.0.0.0.0.0.0.0.0", 10)
 #' }
 #'
@@ -194,7 +194,7 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, per
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getDataFromVectorsAndLatestNPeriods("74804", 5)
 #' getDataFromVectorsAndLatestNPeriods("v74804", 5)
 #' getDataFromVectorsAndLatestNPeriods(74804, 5)
@@ -242,15 +242,19 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
 #' @param vector_ids Vector is a short identifier to refer to a time series of
 #' data points. Unique variable length reference code, consisting of the
 #' letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)
-#' @param start_release_date
-#' @param end_release_date
+#' @param start_release_date Release date of vector data. The returned data
+#' will have been released on or after this date. The release date may lag
+#' behind the reference date of the data by months or years.
+#' @param end_release_date Release date of vector data. The returned data
+#' will have been released on or before this date. The release date may lag
+#' behind the reference date of the data by months or years.
 #'
 #' @export
 #'
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getBulkVectorDataByRange("74804")
 #' getBulkVectorDataByRange("v74804")
 #' getBulkVectorDataByRange(74804)
@@ -270,7 +274,7 @@ getBulkVectorDataByRange <- function(vector_ids,
   #     "endDataPointReleaseDate": "2018-03-31T19:00"
   #   }
 
-  # release dates are annoying
+
   if (!is.character(vector_ids) & !is.integer(vector_ids)) {
     stop(paste0("Vectors must be a character or integer vector."), call. = FALSE)
   } # return actual class in message
@@ -322,7 +326,7 @@ getBulkVectorDataByRange <- function(vector_ids,
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getFullTableDownloadCSV(35100003, "fr")
 #' }
 getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
@@ -375,7 +379,7 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getFullTableDownloadSDMX(35100003)
 #' }
 getFullTableDownloadSDMX <- function(product_id) {

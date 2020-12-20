@@ -16,7 +16,7 @@ recent version of the code sets with descriptions (English and French) for
 all possible codes.
 }
 \examples{
-\donttest{
+\dontrun{
 getCodeSets()
 }
 
