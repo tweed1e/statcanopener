@@ -36,12 +36,25 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
   # POST BODY:
   #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0"}]
 
-  body <- paste0('[{"productId:"', product_id, ',"coordinate:","', coordinate, '}]')
+
+  if (!is.character(product_id) & !is.integer(product_id)) {
+    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  } # return actual class in message
+
+  if (!grepl("^[0-9]+$", product_id)) {
+    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  if (!is.character(coordinate)) {
+    stop(paste0("Cooedinate must be a string"), call. = FALSE)
+  }
+
+  body <- paste0('[{"productId":', product_id, ',"coordinate":,"', coordinate, '}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromCubePidCoord",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -75,12 +88,23 @@ getChangedSeriesDataFromVector <- function(vector_id) {
   #   [{"vectorId":32164132}]
   #
 
+  if (!is.character(vector_id) & !is.integer(vector_id)) {
+    stop(paste0("Vector must be a character or integer vector."), call. = FALSE)
+  } # return actual class in message
+
+  if (!grepl("^v?[0-9]+$", vector_id)) {
+    stop(paste0("Vector ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
+
+
   body <- paste0('[{"vectorId":', vector_id, '}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromVector",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -123,14 +147,30 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, per
   #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0", "latestN":3}]
   #
 
-  body <- paste0('[{"productId:"', product_id,
-                 ',"coordinate:","', coordinate,
-                 ',latestN:', periods ,'}]')
+  if (!is.character(product_id) & !is.integer(product_id)) {
+    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  } # return actual class in message
+
+  if (!grepl("^[0-9]+$", product_id)) {
+    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  if (!is.integer(periods) | periods > 0) {
+    stop(paste0("Period must be an integer > 0"), call. = FALSE)
+  }
+
+  if (!is.character(coordinate)) {
+    stop(paste0("Cooedinate must be a string"), call. = FALSE)
+  }
+
+  body <- paste0('[{"productId":', product_id,
+                 ',"coordinate":,"', coordinate,
+                 ',"latestN":', periods ,'}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -168,13 +208,26 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
   # POST BODY:
   #   [{"vectorId":32164132, "latestN":3}]
 
+  if (!is.character(vector_id) & !is.integer(vector_id)) {
+    stop(paste0("Vector must be a character or integer vector."), call. = FALSE)
+  } # return actual class in message
 
-  body <- paste0('[{"vectorId":', vector_id, ',"latestN:', periods, '}]')
+  if (!grepl("^v?[0-9]+$", vector_id)) {
+    stop(paste0("Vector ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  if (!is.integer(periods) | periods > 0) {
+    stop(paste0("Period must be an integer > 0"), call. = FALSE)
+  }
+
+  vector_ids <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
+
+  body <- paste0('[{"vectorId":', vector_id, ',"latestN":', periods, '}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorsAndLatestNPeriods",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -217,8 +270,6 @@ getBulkVectorDataByRange <- function(vector_ids,
   #     "endDataPointReleaseDate": "2018-03-31T19:00"
   #   }
 
-  # check args
-  # dates are strings or dates that are meaningful
   # release dates are annoying
   if (!is.character(vector_ids) & !is.integer(vector_ids)) {
     stop(paste0("Vectors must be a character or integer vector."), call. = FALSE)
@@ -246,7 +297,7 @@ getBulkVectorDataByRange <- function(vector_ids,
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getBulkVectorDataByRange",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -285,11 +336,24 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
   #     "status": "SUCCESS",
   #     "object": "https://www150.statcan.gc.ca/n1/tbl/csv/14100287-eng.zip"
   #   }
+
+  if (!is.character(product_id) & !is.integer(product_id)) {
+    stop(paste0("Product ID must be a character or integer vector."), call. = FALSE)
+  } # return actual class in message
+
+  if (!all(grepl("^[0-9]+$", product_id))) {
+    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  if (!language %in% c("en", "fr")) {
+    stop(paste0("Language must be either 'en' or 'fr'."), call. = FALSE)
+  } # return actual class in message
+
   url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadCSV/", product_id, "/", language)
 
   httr::GET(
     url = url,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -325,11 +389,21 @@ getFullTableDownloadSDMX <- function(product_id) {
   #     "status": "SUCCESS",
   #     "object": "https://www150.statcan.gc.ca/n1/tbl/sdmx/14100287-SDMX.zip"
   #   }
+
+  if (!is.character(product_id) & !is.integer(product_id)) {
+    stop(paste0("Product ID must be a character or integer vector."), call. = FALSE)
+  } # return actual class in message
+
+  if (!all(grepl("^[0-9]+$", product_id))) {
+    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+
   url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadSDMX/", product_id)
 
   httr::GET(
     url = url,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }

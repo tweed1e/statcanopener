@@ -20,7 +20,7 @@
 getCodeSets <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getCodeSets",
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }

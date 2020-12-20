@@ -18,12 +18,28 @@
 #' getCubeMetadata(35100003)
 #' }
 getCubeMetadata <- function(product_id) {
-  body <- paste0('[{"productId:"', product_id, '}]')
+  # getCubeMetadata
+  # POST URL:
+  #   https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata
+  #
+  # POST BODY:
+  #   [{"productId":35100003}]
+
+
+  if (!is.character(product_id) & !is.integer(product_id)) {
+    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  } # return actual class in message
+
+  if (!grepl("^[0-9]+$", product_id)) {
+    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  body <- paste0('[{"productId":', product_id, '}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -49,7 +65,7 @@ getCubeMetadata <- function(product_id) {
 getAllCubesList <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getAllCubesList",
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -74,7 +90,7 @@ getAllCubesList <- function() {
 getAllCubesListLite <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getAllCubesListLite",
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -105,12 +121,25 @@ getAllCubesListLite <- function() {
 #' }
 #'
 getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
-  body <- paste0('[{"productId:"', product_id, ',"coordinate:","', coordinate, '}]')
+
+  if (!is.character(product_id) & !is.integer(product_id)) {
+    stop(paste0("Product ID must be a character or integer vector"), call. = FALSE)
+  } # return actual class in message
+
+  if (!grepl("^[0-9]+$", product_id)) {
+    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  if (!is.character(coordinate)) {
+    stop(paste0("Cooedinate must be a string"), call. = FALSE)
+  }
+
+  body <- paste0('[{"productId":', product_id, ',"coordinate":,"', coordinate, '}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getSeriesInfoFromCubePidCoord",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -137,12 +166,22 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #'
 getSeriesInfoFromVector <- function(vector_id) {
 
-  body <- paste0('[{"vectorId:"', vector_id, ']}')
+  if (!is.character(vector_id) & !is.integer(vector_id)) {
+    stop(paste0("Vector must be a character or integer vector."), call. = FALSE)
+  } # return actual class in message
+
+  if (!grepl("^v?[0-9]+$", vector_id)) {
+    stop(paste0("Vector ID must be an integer >= 0"), call. = FALSE)
+  } # return actual class in message
+
+  vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
+
+  body <- paste0('[{"vectorId":', vector_id, ']}')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getSeriesInfoFromVector",
     body = body,
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
