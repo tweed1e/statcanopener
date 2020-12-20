@@ -25,7 +25,7 @@ A json object.
 Get series titles, product ID, CANSIM ID, release date, and more.
 }
 \examples{
-\donttest{
+\dontrun{
 getSeriesInfoFromCubePidCoord(35100003, "1.12.0.0.0.0.0.0.0.0")
 }
 

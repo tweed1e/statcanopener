@@ -21,7 +21,7 @@ A json object.
 Get changed series data from vector
 }
 \examples{
-\donttest{
+\dontrun{
 getDataFromVectorsAndLatestNPeriods("74804", 5)
 getDataFromVectorsAndLatestNPeriods("v74804", 5)
 getDataFromVectorsAndLatestNPeriods(74804, 5)

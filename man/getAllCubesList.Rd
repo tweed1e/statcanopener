@@ -16,7 +16,7 @@ accesses a comprehensive list of details about each table including
 information at the dimension level.
 }
 \examples{
-\donttest{
+\dontrun{
 getAllCubesList()
 }
 }

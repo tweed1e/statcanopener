@@ -15,7 +15,13 @@ getBulkVectorDataByRange(
 data points. Unique variable length reference code, consisting of the
 letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)}
 
-\item{end_release_date}{}
+\item{start_release_date}{Release date of vector data. The returned data
+will have been released on or after this date. The release date may lag
+behind the reference date of the data by months or years.}
+
+\item{end_release_date}{Release date of vector data. The returned data
+will have been released on or before this date. The release date may lag
+behind the reference date of the data by months or years.}
 }
 \value{
 A json object.
@@ -24,7 +30,7 @@ A json object.
 Download a vector
 }
 \examples{
-\donttest{
+\dontrun{
 getBulkVectorDataByRange("74804")
 getBulkVectorDataByRange("v74804")
 getBulkVectorDataByRange(74804)

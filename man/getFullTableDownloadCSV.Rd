@@ -22,7 +22,7 @@ A json object.
 Get cube/table titles, product ID, CANSIM ID, release date, and more.
 }
 \examples{
-\donttest{
+\dontrun{
 getFullTableDownloadCSV(35100003, "fr")
 }
 }

@@ -18,7 +18,7 @@ A json object.
 Get series titles, product ID, CANSIM ID, release date, and more.
 }
 \examples{
-\donttest{
+\dontrun{
 getSeriesInfoFromVector(32164132)
 }
 

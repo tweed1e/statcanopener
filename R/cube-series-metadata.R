@@ -14,7 +14,7 @@
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getCubeMetadata(35100003)
 #' }
 getCubeMetadata <- function(product_id) {
@@ -59,7 +59,7 @@ getCubeMetadata <- function(product_id) {
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getAllCubesList()
 #' }
 getAllCubesList <- function() {
@@ -84,7 +84,7 @@ getAllCubesList <- function() {
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getAllCubesListLite()
 #' }
 getAllCubesListLite <- function() {
@@ -116,7 +116,7 @@ getAllCubesListLite <- function() {
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getSeriesInfoFromCubePidCoord(35100003, "1.12.0.0.0.0.0.0.0.0")
 #' }
 #'
@@ -160,7 +160,7 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #' @return A json object.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' getSeriesInfoFromVector(32164132)
 #' }
 #'

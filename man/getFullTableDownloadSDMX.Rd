@@ -20,7 +20,7 @@ A json object.
 Get cube/table titles, product ID, CANSIM ID, release date, and more.
 }
 \examples{
-\donttest{
+\dontrun{
 getFullTableDownloadSDMX(35100003)
 }
 }

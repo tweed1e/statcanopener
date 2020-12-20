@@ -18,7 +18,7 @@ A json object.
 Get changed series data from vector
 }
 \examples{
-\donttest{
+\dontrun{
 getChangedSeriesDataFromVector("74804")
 getChangedSeriesDataFromVector("v74804")
 getChangedSeriesDataFromVector(74804)
