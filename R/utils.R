@@ -1,8 +1,20 @@
-
-
+#' Format date for API call
+#'
+#' Format date to %Y-%m-%dT%H:%M, using Statcan's time zone
+#'
+#' @param date A date
+#'
+#' @return Date with format %Y-%m-%dT%H:%M
+#'
+#' @examples
+#' \dontrun{
+#' check_vector_id(42973393)
+#' }
+#'
 stc_time <- function(date) {
   strftime(date, "%Y-%m-%dT%H:%M", tz = "America/Toronto")
 }
+
 
 #' Check vector ID for errors
 #'
@@ -10,9 +22,6 @@ stc_time <- function(date) {
 #' Current max length: 10 digits Minimum length: 1.
 #'
 #' @param vector_id ID of the Vector that represents the time series
-#'
-#'
-#' @export
 #'
 #' @return TRUE
 #'
@@ -46,9 +55,6 @@ check_vector_id <- function(vector_id) {
 #'
 #' @param product_id ID of the product/table
 #'
-#'
-#' @export
-#'
 #' @return TRUE
 #'
 #' @examples
@@ -77,9 +83,6 @@ check_product_id <- function(product_id) {
 #'
 #' @param coordinate coordinate of the data point
 #'
-#'
-#' @export
-#'
 #' @return TRUE
 #'
 #' @examples
@@ -98,14 +101,13 @@ check_coordinate <- function(coordinate) {
 
 }
 
+
+
 #' Check number of periods
 #'
 #' Periods must be a strictly positive integer.
 #'
 #' @param periods Number of periods
-#'
-#'
-#' @export
 #'
 #' @return TRUE
 #'

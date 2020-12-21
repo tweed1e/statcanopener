@@ -1,25 +1,76 @@
 
 context("test-data-access")
 
-test_that("getBulkVectorDataByRange returns the right output format.", {
+test_that("getChangedSeriesDataFromCubePidCoord doesn't return an http_error", {
   # skip_on_cran()
   # skip_if_offline()
-  # vectors <- c("113413955","113411623")
-  # output <- getBulkVectorDataByRange(vector_ids = vectors, "2015-01-01", "2015-12-31")
+  expect_false(httr::http_error(
+    getChangedSeriesDataFromCubePidCoord(35100003, "1.12.0.0.0.0.0.0.0.0")
+  ))
 
-  # expect_is(output, "tbl_df")
-  # expect_is(output, "tbl")
-  # expect_is(output, "data.frame")
+})
+
+test_that("getChangedSeriesDataFromVector doesn't return an http_error", {
+  # skip_on_cran()
+  # skip_if_offline()
+  expect_false(httr::http_error(
+    getChangedSeriesDataFromVector(32164132)
+  ))
+
+})
+
+
+test_that("getDataFromCubePidCoordAndLatestNPeriods doesn't return an http_error", {
+  # skip_on_cran()
+  # skip_if_offline()
+  expect_false(httr::http_error(
+    getDataFromCubePidCoordAndLatestNPeriods(35100003, "1.12.0.0.0.0.0.0.0.0", 10)
+  ))
 
 })
 
 
 
-# skip if offline?
-# skip on cran?
-# expect output to be json?
+test_that("getDataFromVectorsAndLatestNPeriods doesn't return an http_error", {
+  # skip_on_cran()
+  # skip_if_offline()
+  expect_false(httr::http_error(
+    getDataFromVectorsAndLatestNPeriods("74804", 5)
+  ))
 
-# expect_is(output, "tbl_df")
-# expect_is(output$name, "character")
-# expect_is(output$id, "character")
+})
+
+
+
+test_that("getBulkVectorDataByRange doesn't return an http_error", {
+  # skip_on_cran()
+  # skip_if_offline()
+  expect_false(httr::http_error(
+    getBulkVectorDataByRange("74804")
+  ))
+
+})
+
+
+
+test_that("getFullTableDownloadCSV doesn't return an http_error", {
+  # skip_on_cran()
+  # skip_if_offline()
+  expect_false(httr::http_error(
+    getFullTableDownloadCSV(35100003, "fr")
+  ))
+
+})
+
+
+
+
+test_that("getFullTableDownloadSDMX doesn't return an http_error", {
+  # skip_on_cran()
+  # skip_if_offline()
+  expect_false(httr::http_error(
+    getFullTableDownloadSDMX(35100003)
+  ))
+
+})
 
