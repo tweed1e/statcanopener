@@ -10,7 +10,7 @@
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{

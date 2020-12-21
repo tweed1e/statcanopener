@@ -11,7 +11,7 @@
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \donttest{
@@ -20,7 +20,7 @@
 getChangedSeriesList <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesList",
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }
@@ -37,7 +37,7 @@ getChangedSeriesList <- function() {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \donttest{
@@ -46,7 +46,7 @@ getChangedSeriesList <- function() {
 getChangedCubeList <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedCubeList/2017-12-07",
-    encode="json",
+    encode = "raw",
     httr::add_headers("Content-Type"="application/json")
   )
 }

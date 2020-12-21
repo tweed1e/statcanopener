@@ -100,3 +100,6 @@ test_that("stc_time returns string", {
   expect_type(stc_time("2019-01-01"), "character")
 })
 
+test_that("stc_time returns correct format", {
+  expect_equal(stc_time("2019-01-01"), "2019-01-01T00:00")
+})

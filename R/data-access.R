@@ -1,10 +1,3 @@
-
-
-
-
-# Data Access; data changes for today, over time and full table
-
-
 #' Get changed series data
 #'
 #' Get changed series data given a product ID and coordinate
@@ -21,7 +14,7 @@
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -29,18 +22,12 @@
 #' }
 #'
 getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
-  # getChangedSeriesDataFromCubePidCoord
-  # POST URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromCubePidCoord
-  #
-  # POST BODY:
-  #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0"}]
 
   check_product_id(product_id)
   check_coordinate(coordinate)
 
-  body <- paste0('[{"productId":', product_id, ',"coordinate":,"', coordinate, '}]')
-
+  body <- paste0('[{"productId":', product_id, ',"coordinate":"', coordinate, '"}]')
+print(body)
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromCubePidCoord",
     body = body,
@@ -60,7 +47,7 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -70,18 +57,9 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
 #' }
 getChangedSeriesDataFromVector <- function(vector_id) {
 
-  # getChangedSeriesDataFromVector
-  # POST URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromVector
-  #
-  # POST BODY:
-  #   [{"vectorId":32164132}]
-  #
-
   check_vector_id(vector_id)
 
   vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
-
 
   body <- paste0('[{"vectorId":', vector_id, '}]')
 
@@ -115,7 +93,7 @@ getChangedSeriesDataFromVector <- function(vector_id) {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -123,22 +101,14 @@ getChangedSeriesDataFromVector <- function(vector_id) {
 #' }
 #'
 getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, periods) {
-  # getDataFromCubePidCoordAndLatestNPeriods
-  # POST URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods
-  #
-  # POST BODY:
-  #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0", "latestN":3}]
-
 
   check_product_id(product_id)
   check_periods(periods)
   check_coordinate(coordinate)
 
-
   body <- paste0('[{"productId":', product_id,
-                 ',"coordinate":,"', coordinate,
-                 ',"latestN":', periods ,'}]')
+                 ',"coordinate":"', coordinate,
+                 '","latestN":', periods ,'}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods",
@@ -164,7 +134,7 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, per
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -173,13 +143,6 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, per
 #' getDataFromVectorsAndLatestNPeriods(74804, 5)
 #' }
 getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
-
-  # getDataFromVectorsAndLatestNPeriods
-  # POST URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorsAndLatestNPeriods
-  #
-  # POST BODY:
-  #   [{"vectorId":32164132, "latestN":3}]
 
   check_vector_id(vector_id)
   check_periods(periods)
@@ -215,7 +178,7 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -226,24 +189,13 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
 getBulkVectorDataByRange <- function(vector_ids,
                                      start_release_date = "1901-01-01",
                                      end_release_date = as.Date(Sys.time())) {
-  # getBulkVectorDataByRange
-  # POST URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getBulkVectorDataByRange
-  #
-  # POST BODY:
-  #
-  #   {
-  #     "vectorIds": ["74804","1"],
-  #     "startDataPointReleaseDate": "2015-12-01T08:30",
-  #     "endDataPointReleaseDate": "2018-03-31T19:00"
-  #   }
 
   check_vector_id(vector_ids)
 
   vector_ids <- sub("^v", "", vector_ids, ignore.case = TRUE) # converts to character
 
   # etc
-  vectors_args <- paste0('"vectorIds":[\"',
+  vectors_args <- paste0('"vectorIds":["',
                          paste(vector_ids, collapse = '","'),
                          '"]')
 
@@ -268,7 +220,7 @@ getBulkVectorDataByRange <- function(vector_ids,
 
 #' Get full table download link in CSV format
 #'
-#' A direct link to download the table in CSV format. This functiom
+#' A direct link to download the table in CSV format. This function
 #' does not actually download the table itself.
 #'
 #' @param product_id Product Identification number (PID) is a unique product
@@ -281,23 +233,13 @@ getBulkVectorDataByRange <- function(vector_ids,
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return A direct link to download the table in CSV format
 #'
 #' @examples
 #' \dontrun{
 #' getFullTableDownloadCSV(35100003, "fr")
 #' }
 getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
-  # getFullTableDownloadCSV
-  # GET URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadCSV/14100287/en
-  #
-  # RESULT:
-  #
-  #   {
-  #     "status": "SUCCESS",
-  #     "object": "https://www150.statcan.gc.ca/n1/tbl/csv/14100287-eng.zip"
-  #   }
 
   check_product_id(product_id)
 
@@ -318,7 +260,7 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 
 #' Get full table download link in SDMX format
 #'
-#' A direct link to download the table in SDMX format. This functiom
+#' A direct link to download the table in SDMX format. This function
 #' does not actually download the table itself.
 #'
 #' @param product_id Product Identification number (PID) is a unique product
@@ -329,23 +271,13 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 #'
 #' @export
 #'
-#' @return A direct link to download the table in SDMX format..
+#' @return A direct link to download the table in SDMX format
 #'
 #' @examples
 #' \dontrun{
 #' getFullTableDownloadSDMX(35100003)
 #' }
 getFullTableDownloadSDMX <- function(product_id) {
-  # getFullTableDownloadSDMX
-  # GET URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadSDMX/14100287
-  #
-  # RESULT:
-  #
-  #   {
-  #     "status": "SUCCESS",
-  #     "object": "https://www150.statcan.gc.ca/n1/tbl/sdmx/14100287-SDMX.zip"
-  #   }
 
   check_product_id(product_id)
 

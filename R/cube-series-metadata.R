@@ -11,19 +11,13 @@
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
 #' getCubeMetadata(35100003)
 #' }
 getCubeMetadata <- function(product_id) {
-  # getCubeMetadata
-  # POST URL:
-  #   https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata
-  #
-  # POST BODY:
-  #   [{"productId":35100003}]
 
   check_product_id(product_id)
 
@@ -49,7 +43,7 @@ getCubeMetadata <- function(product_id) {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -74,7 +68,7 @@ getAllCubesList <- function() {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -106,7 +100,7 @@ getAllCubesListLite <- function() {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -141,7 +135,7 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #'
 #' @export
 #'
-#' @return A json object.
+#' @return An httr response object
 #'
 #' @examples
 #' \dontrun{
@@ -154,7 +148,7 @@ getSeriesInfoFromVector <- function(vector_id) {
 
   vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
 
-  body <- paste0('[{"vectorId":', vector_id, ']}')
+  body <- paste0('[{"vectorId":', vector_id, '}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getSeriesInfoFromVector",
