@@ -36,18 +36,8 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
   # POST BODY:
   #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0"}]
 
-
-  if (!is.character(product_id) & !is.numeric(product_id)) {
-    stop(paste0("Product ID must be a character or numeric vector"), call. = FALSE)
-  } # return actual class in message
-
-  if (!grepl("^[0-9]+$", product_id)) {
-    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
-  } # return actual class in message
-
-  if (!is.character(coordinate)) {
-    stop(paste0("Coordinate must be a string"), call. = FALSE)
-  }
+  check_product_id(product_id)
+  check_coordinate(coordinate)
 
   body <- paste0('[{"productId":', product_id, ',"coordinate":,"', coordinate, '}]')
 
@@ -88,13 +78,7 @@ getChangedSeriesDataFromVector <- function(vector_id) {
   #   [{"vectorId":32164132}]
   #
 
-  if (!is.character(vector_id) & !is.numeric(vector_id)) {
-    stop(paste0("Vector must be a character or numeric vector."), call. = FALSE)
-  } # return actual class in message
-
-  if (!grepl("^v?[0-9]+$", vector_id)) {
-    stop(paste0("Vector ID must be an integer >= 0"), call. = FALSE)
-  } # return actual class in message
+  check_vector_id(vector_id)
 
   vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
 
@@ -145,23 +129,12 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, per
   #
   # POST BODY:
   #   [{"productId": 35100003, "coordinate": "1.12.0.0.0.0.0.0.0.0", "latestN":3}]
-  #
 
-  if (!is.character(product_id) & !is.numeric(product_id)) {
-    stop(paste0("Product ID must be a character or numeric vector"), call. = FALSE)
-  } # return actual class in message
 
-  if (!grepl("^[0-9]+$", product_id)) {
-    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
-  } # return actual class in message
+  check_product_id(product_id)
+  check_periods(periods)
+  check_coordinate(coordinate)
 
-  if (!is.numeric(periods) | periods > 0) {
-    stop(paste0("Period must be an integer > 0"), call. = FALSE)
-  }
-
-  if (!is.character(coordinate)) {
-    stop(paste0("Coordinate must be a string"), call. = FALSE)
-  }
 
   body <- paste0('[{"productId":', product_id,
                  ',"coordinate":,"', coordinate,
@@ -208,19 +181,10 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
   # POST BODY:
   #   [{"vectorId":32164132, "latestN":3}]
 
-  if (!is.character(vector_id) & !is.numeric(vector_id)) {
-    stop(paste0("Vector must be a character or numeric vector."), call. = FALSE)
-  } # return actual class in message
+  check_vector_id(vector_id)
+  check_periods(periods)
 
-  if (!grepl("^v?[0-9]+$", vector_id)) {
-    stop(paste0("Vector ID must be an integer >= 0"), call. = FALSE)
-  } # return actual class in message
-
-  if (!is.numeric(periods) | periods > 0) {
-    stop(paste0("Period must be an integer > 0"), call. = FALSE)
-  }
-
-  vector_ids <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
+  vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
 
   body <- paste0('[{"vectorId":', vector_id, ',"latestN":', periods, '}]')
 
@@ -274,14 +238,7 @@ getBulkVectorDataByRange <- function(vector_ids,
   #     "endDataPointReleaseDate": "2018-03-31T19:00"
   #   }
 
-
-  if (!is.character(vector_ids) & !is.numeric(vector_ids)) {
-    stop(paste0("Vectors must be a character or numeric vector."), call. = FALSE)
-  } # return actual class in message
-
-  if (!all(grepl("^v?[0-9]+$", vector_ids))) {
-    stop(paste0("Each element of vectors must be an integer >= 0"), call. = FALSE)
-  } # return actual class in message
+  check_vector_id(vector_ids)
 
   vector_ids <- sub("^v", "", vector_ids, ignore.case = TRUE) # converts to character
 
@@ -342,13 +299,7 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
   #     "object": "https://www150.statcan.gc.ca/n1/tbl/csv/14100287-eng.zip"
   #   }
 
-  if (!is.character(product_id) & !is.numeric(product_id)) {
-    stop(paste0("Product ID must be a character or numeric vector."), call. = FALSE)
-  } # return actual class in message
-
-  if (!all(grepl("^[0-9]+$", product_id))) {
-    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
-  } # return actual class in message
+  check_product_id(product_id)
 
   if (!language %in% c("en", "fr")) {
     stop(paste0("Language must be either 'en' or 'fr'."), call. = FALSE)
@@ -396,14 +347,7 @@ getFullTableDownloadSDMX <- function(product_id) {
   #     "object": "https://www150.statcan.gc.ca/n1/tbl/sdmx/14100287-SDMX.zip"
   #   }
 
-  if (!is.character(product_id) & !is.numeric(product_id)) {
-    stop(paste0("Product ID must be a character or numeric vector."), call. = FALSE)
-  } # return actual class in message
-
-  if (!all(grepl("^[0-9]+$", product_id))) {
-    stop(paste0("Product ID must be an integer >= 0"), call. = FALSE)
-  } # return actual class in message
-
+  check_product_id(product_id)
 
   url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadSDMX/", product_id)
 
