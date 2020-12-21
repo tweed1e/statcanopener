@@ -19,7 +19,8 @@ itself.}
 A json object.
 }
 \description{
-Get cube/table titles, product ID, CANSIM ID, release date, and more.
+A direct link to download the table in CSV format. This functiom
+does not actually download the table itself.
 }
 \examples{
 \dontrun{
