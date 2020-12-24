@@ -7,7 +7,7 @@
 getCodeSets()
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Code Sets provide additional information to describe the information such as

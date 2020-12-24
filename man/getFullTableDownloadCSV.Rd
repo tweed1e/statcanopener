@@ -16,10 +16,10 @@ itself.}
 \item{language}{'en' for English or 'fr' for French}
 }
 \value{
-A json object.
+A direct link to download the table in CSV format
 }
 \description{
-A direct link to download the table in CSV format. This functiom
+A direct link to download the table in CSV format. This function
 does not actually download the table itself.
 }
 \examples{

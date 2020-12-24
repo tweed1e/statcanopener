@@ -16,6 +16,7 @@ TRUE
 Periods must be a strictly positive integer.
 }
 \examples{
+\dontrun{
 check_periods(10)
-
+}
 }

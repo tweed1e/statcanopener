@@ -22,17 +22,16 @@
 #' }
 #'
 getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
-
   check_product_id(product_id)
   check_coordinate(coordinate)
 
   body <- paste0('[{"productId":', product_id, ',"coordinate":"', coordinate, '"}]')
-print(body)
+
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromCubePidCoord",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -56,18 +55,17 @@ print(body)
 #' getChangedSeriesDataFromVector(74804)
 #' }
 getChangedSeriesDataFromVector <- function(vector_id) {
-
   check_vector_id(vector_id)
 
   vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
 
-  body <- paste0('[{"vectorId":', vector_id, '}]')
+  body <- paste0('[{"vectorId":', vector_id, "}]")
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromVector",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -101,20 +99,21 @@ getChangedSeriesDataFromVector <- function(vector_id) {
 #' }
 #'
 getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, periods) {
-
   check_product_id(product_id)
   check_periods(periods)
   check_coordinate(coordinate)
 
-  body <- paste0('[{"productId":', product_id,
-                 ',"coordinate":"', coordinate,
-                 '","latestN":', periods ,'}]')
+  body <- paste0(
+    '[{"productId":', product_id,
+    ',"coordinate":"', coordinate,
+    '","latestN":', periods, "}]"
+  )
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -143,19 +142,20 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, per
 #' getDataFromVectorsAndLatestNPeriods(74804, 5)
 #' }
 getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
-
   check_vector_id(vector_id)
   check_periods(periods)
 
   vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
 
-  body <- paste0('[{"vectorId":', vector_id, ',"latestN":', periods, '}]')
+  # can take multiple vectors but each has the same [{"vectorId":1,"latestN":1}, ...]
+
+  body <- paste0('[{"vectorId":', vector_id, ',"latestN":', periods, "}]")
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorsAndLatestNPeriods",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -171,10 +171,10 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
 #' letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)
 #' @param start_release_date Release date of vector data. The returned data
 #' will have been released on or after this date. The release date may lag
-#' behind the reference date of the data by months or years.
+#' behind the most recent reference date of the data by months or years.
 #' @param end_release_date Release date of vector data. The returned data
 #' will have been released on or before this date. The release date may lag
-#' behind the reference date of the data by months or years.
+#' behind the most recent reference date of the data by months or years.
 #'
 #' @export
 #'
@@ -189,15 +189,16 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
 getBulkVectorDataByRange <- function(vector_ids,
                                      start_release_date = "1901-01-01",
                                      end_release_date = as.Date(Sys.time())) {
-
   check_vector_id(vector_ids)
 
   vector_ids <- sub("^v", "", vector_ids, ignore.case = TRUE) # converts to character
 
   # etc
-  vectors_args <- paste0('"vectorIds":["',
-                         paste(vector_ids, collapse = '","'),
-                         '"]')
+  vectors_args <- paste0(
+    '"vectorIds":["',
+    paste(vector_ids, collapse = '","'),
+    '"]'
+  )
 
   times_args <- paste0(
     '"startDataPointReleaseDate":"', stc_time(start_release_date),
@@ -205,13 +206,13 @@ getBulkVectorDataByRange <- function(vector_ids,
     '"'
   )
 
-  body <- paste0('{', vectors_args, ',', times_args, '}')
+  body <- paste0("{", vectors_args, ",", times_args, "}")
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getBulkVectorDataByRange",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -240,7 +241,6 @@ getBulkVectorDataByRange <- function(vector_ids,
 #' getFullTableDownloadCSV(35100003, "fr")
 #' }
 getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
-
   check_product_id(product_id)
 
   if (!language %in% c("en", "fr")) {
@@ -252,7 +252,7 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
   httr::GET(
     url = url,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -278,7 +278,6 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 #' getFullTableDownloadSDMX(35100003)
 #' }
 getFullTableDownloadSDMX <- function(product_id) {
-
   check_product_id(product_id)
 
   url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadSDMX/", product_id)
@@ -286,11 +285,6 @@ getFullTableDownloadSDMX <- function(product_id) {
   httr::GET(
     url = url,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
-
-
-
-
-

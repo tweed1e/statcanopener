@@ -4,10 +4,13 @@
 \alias{getChangedCubeList}
 \title{Get list of changed cubes/tables}
 \usage{
-getChangedCubeList()
+getChangedCubeList(date = "")
+}
+\arguments{
+\item{date}{Date in format YYYY-MM-DD}
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Users can choose to ask for what series have changed today. This can be

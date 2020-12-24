@@ -18,16 +18,15 @@
 #' getCubeMetadata(35100003)
 #' }
 getCubeMetadata <- function(product_id) {
-
   check_product_id(product_id)
 
-  body <- paste0('[{"productId":', product_id, '}]')
+  body <- paste0('[{"productId":', product_id, "}]")
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -53,7 +52,7 @@ getAllCubesList <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getAllCubesList",
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -78,7 +77,7 @@ getAllCubesListLite <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getAllCubesListLite",
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -108,17 +107,16 @@ getAllCubesListLite <- function() {
 #' }
 #'
 getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
-
   check_product_id(product_id)
   check_coordinate(coordinate)
 
-  body <- paste0('[{"productId":', product_id, ',"coordinate":,"', coordinate, '}]')
+  body <- paste0('[{"productId":', product_id, ',"coordinate":"', coordinate, '"}]')
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getSeriesInfoFromCubePidCoord",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -143,22 +141,16 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #' }
 #'
 getSeriesInfoFromVector <- function(vector_id) {
-
   check_vector_id(vector_id)
 
   vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
 
-  body <- paste0('[{"vectorId":', vector_id, '}]')
+  body <- paste0('[{"vectorId":', vector_id, "}]")
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getSeriesInfoFromVector",
     body = body,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
-
-
-
-
-

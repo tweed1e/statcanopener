@@ -20,6 +20,7 @@ within the subject (i.e. 0089). Digits 9 and 10 are optional, to identify
 the simple view of a table/cube (i.e. 01)
 }
 \examples{
+\dontrun{
 check_product_id(1310008901)
-
+}
 }

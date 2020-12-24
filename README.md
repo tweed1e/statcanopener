@@ -14,6 +14,8 @@ Web Data Service](https://www.statcan.gc.ca/eng/developers/wds). With
 it, you can build Statcan’s API queries into your packages, reporting
 workflows or Shiny apps.
 
+(Do not use API between 12:00 midnight and 8:30AM EST lol.)
+
 ## Installation
 
 <!-- You can install the released version of statcanopener from [CRAN](https://CRAN.R-project.org) with: -->
@@ -47,11 +49,11 @@ str(content[[1]], max.level = 2)
 #>   ..$ cubeTitleEn       : chr "Average counts of young persons in provincial and territorial correctional services"
 #>   ..$ cubeTitleFr       : chr "Comptes moyens des adolescents dans les services correctionnels provinciaux et territoriaux"
 #>   ..$ cubeStartDate     : chr "1997-01-01"
-#>   ..$ cubeEndDate       : chr "2017-01-01"
+#>   ..$ cubeEndDate       : chr "2018-01-01"
 #>   ..$ frequencyCode     : int 12
 #>   ..$ nbSeriesCube      : int 174
-#>   ..$ nbDatapointsCube  : int 3468
-#>   ..$ releaseTime       : chr "2019-05-09T08:30"
+#>   ..$ nbDatapointsCube  : int 3636
+#>   ..$ releaseTime       : chr "2020-12-21T08:30"
 #>   ..$ archiveStatusCode : chr "2"
 #>   ..$ archiveStatusEn   : chr "CURRENT - a cube available to the public and that is current"
 #>   ..$ archiveStatusFr   : chr "ACTIF - un cube qui est disponible au public et qui est toujours mise a jour"
