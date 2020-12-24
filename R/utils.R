@@ -31,7 +31,6 @@ stc_time <- function(date) {
 #' }
 #'
 check_vector_id <- function(vector_id) {
-
   if (!is.character(vector_id) & !is.numeric(vector_id)) {
     stop(paste0("vector_id must be a character or numeric vector"), call. = FALSE)
   }
@@ -58,10 +57,10 @@ check_vector_id <- function(vector_id) {
 #' @return TRUE
 #'
 #' @examples
+#' \dontrun{
 #' check_product_id(1310008901)
-#'
+#' }
 check_product_id <- function(product_id) {
-
   if (!is.character(product_id) & !is.numeric(product_id)) {
     stop(paste0("product_id must be a character or numeric vector"), call. = FALSE)
   }
@@ -86,10 +85,10 @@ check_product_id <- function(product_id) {
 #' @return TRUE
 #'
 #' @examples
+#' \dontrun{
 #' check_coordinate("1.1.1.36.1.0.0.0.0.0")
-#'
+#' }
 check_coordinate <- function(coordinate) {
-
   if (!is.character(coordinate)) {
     stop(paste0("Coordinate must be a string"), call. = FALSE)
   }
@@ -98,7 +97,6 @@ check_coordinate <- function(coordinate) {
   }
 
   return(TRUE)
-
 }
 
 
@@ -112,10 +110,10 @@ check_coordinate <- function(coordinate) {
 #' @return TRUE
 #'
 #' @examples
+#' \dontrun{
 #' check_periods(10)
-#'
+#' }
 check_periods <- function(periods) {
-
   if (!is.numeric(periods) | periods <= 0) {
     stop(paste0("Period must be a positive integer"), call. = FALSE)
   }
@@ -126,3 +124,52 @@ check_periods <- function(periods) {
 
   return(TRUE)
 }
+
+
+check_vector_values <- function(value) {
+  if (length(value) == 0) {
+    stop(paste0("Vector is empty"), call. = FALSE)
+  }
+  if (!is.numeric(value)) {
+    stop(paste0("Vector is not numeric"), call. = FALSE)
+  }
+}
+
+
+
+#' Extract vector data from httr content response
+#'
+#' Extract vector data from httr content response and return as data.frame
+#'
+#' @param content_vector httr content response from getBulkVectorDataByRange call
+#'
+#' @return data.frame with 3 columns: vector_id, ref_date, value
+#'
+#' @examples
+#' \dontrun{
+#' response <- getBulkVectorDataByRange("v113411623")
+#' vector_content <- httr::content(response)
+#' extract_vector(vector_content)
+#' }
+#'
+extract_vector <- function(content_vector) {
+
+  # test that this is httr content from a getBulkVectorByRange call // ugh, it's not
+  # check ref_dates, check value, check ID name
+
+  vector_id <- paste0("v", content_vector$object[["vectorId"]])
+  vector_values <- content_vector$object[["vectorDataPoint"]]
+
+  ref_date <- sapply(vector_values, `[[`, "refPer")
+  value <- sapply(vector_values, `[[`, "value")
+
+  check_vector_id(vector_id)
+  check_vector_values(value)
+  ref_date <- as.Date(ref_date) # throws error if not in the right format?
+
+  data.frame(vector_id, ref_date, value, stringsAsFactors = FALSE)
+}
+
+# Next up: filter and process the vector data
+# And add functionality to add multiple things to API call.
+# might need to change body call to the list/encode json thing

@@ -5,7 +5,9 @@ context("test-check_vector_id")
 
 test_that("check_vector_id returns an error if vector is not a string or numeric", {
   expect_error(
-    check_vector_id(function(x) { "hi" }), "must be a character or numeric"
+    check_vector_id(function(x) {
+      "hi"
+    }), "must be a character or numeric"
   )
   expect_error(
     check_vector_id(list("372648")), "must be a character or numeric"
@@ -51,7 +53,9 @@ test_that("check_product_id returns an error if the id is not either 8 or 10 dig
 })
 
 test_that("check_product_id returns an error if the id is not either a string or numeric", {
-  expect_error(check_product_id(function(x) { "hi" }), "character or numeric")
+  expect_error(check_product_id(function(x) {
+    "hi"
+  }), "character or numeric")
   expect_error(check_product_id(list("372648")), "character or numeric")
   expect_error(check_product_id(data.frame("372648")), "character or numeric")
 })

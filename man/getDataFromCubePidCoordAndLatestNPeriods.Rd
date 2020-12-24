@@ -22,7 +22,7 @@ series of data points.}
 available data point.}
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Get changed series data given a product ID and coordinate

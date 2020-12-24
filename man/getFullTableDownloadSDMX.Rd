@@ -14,10 +14,10 @@ two digits refer to product type, the last four digits refer to the product
 itself.}
 }
 \value{
-A direct link to download the table in SDMX format..
+A direct link to download the table in SDMX format
 }
 \description{
-A direct link to download the table in SDMX format. This functiom
+A direct link to download the table in SDMX format. This function
 does not actually download the table itself.
 }
 \examples{

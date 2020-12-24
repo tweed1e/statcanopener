@@ -7,7 +7,7 @@
 getAllCubesListLite()
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Users can query the output database to provide a complete inventory of data

@@ -21,7 +21,7 @@ getChangedSeriesList <- function() {
   httr::GET(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesList",
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }
 
@@ -35,6 +35,8 @@ getChangedSeriesList <- function() {
 #' day by adding an ISO date to the end of the URL. This date can be any
 #' date from today into the past.
 #'
+#'
+#' @param date Date in format YYYY-MM-DD
 #' @export
 #'
 #' @return An httr response object
@@ -43,10 +45,15 @@ getChangedSeriesList <- function() {
 #' \donttest{
 #' getChangedCubeList()
 #' }
-getChangedCubeList <- function() {
+getChangedCubeList <- function(date = "") {
+
+  # check date format is YYYY-MM-DD
+
+  url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getChangedCubeList/2017-12-07", date)
+
   httr::GET(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedCubeList/2017-12-07",
+    url = url,
     encode = "raw",
-    httr::add_headers("Content-Type"="application/json")
+    httr::add_headers("Content-Type" = "application/json")
   )
 }

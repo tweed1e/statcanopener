@@ -19,7 +19,7 @@ table PID number combined with a coordinate will identify a unique time
 series of data points.}
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Get changed series data given a product ID and coordinate

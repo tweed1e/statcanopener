@@ -24,6 +24,8 @@ Canada's Web Data Service](https://www.statcan.gc.ca/eng/developers/wds). With
 it, you can build Statcan's API queries into your packages, reporting workflows 
 or Shiny apps.
 
+(Do not use API between 12:00 midnight and 8:30AM EST lol.)
+
 ## Installation
 
 <!-- You can install the released version of statcanopener from [CRAN](https://CRAN.R-project.org) with: -->

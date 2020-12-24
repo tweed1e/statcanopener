@@ -12,7 +12,7 @@ data points. Unique variable length reference code, consisting of the
 letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)}
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Get changed series data from vector

@@ -19,6 +19,7 @@ about members). Maximum of 10 dimensions - a fixed length.
 One value per dimension (i.e. 1.1.1.36.1.0.0.0.0.0)
 }
 \examples{
+\dontrun{
 check_coordinate("1.1.1.36.1.0.0.0.0.0")
-
+}
 }

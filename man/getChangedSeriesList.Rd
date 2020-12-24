@@ -7,7 +7,7 @@
 getChangedSeriesList()
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Users can choose to ask for what series have changed today. This can be

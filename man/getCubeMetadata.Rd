@@ -14,7 +14,7 @@ two digits refer to product type, the last four digits refer to the product
 itself.}
 }
 \value{
-A json object.
+An httr response object
 }
 \description{
 Get cube/table titles, product ID, CANSIM ID, release date, and more.
