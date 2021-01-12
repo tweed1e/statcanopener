@@ -148,6 +148,7 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
   vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
 
   # can take multiple vectors but each has the same [{"vectorId":1,"latestN":1}, ...]
+  # so try to pair them up, or just duplicate the periods across
 
   body <- paste0('[{"vectorId":', vector_id, ',"latestN":', periods, "}]")
 
