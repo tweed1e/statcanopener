@@ -185,33 +185,32 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
 #' getBulkVectorDataByRange("74804")
 #' getBulkVectorDataByRange("v74804")
 #' getBulkVectorDataByRange(74804)
+#' getBulkVectorDataByRange(c(74804, 1))
+#' getBulkVectorDataByRange(c("74804", "1"), start_release_date = "1990-01-01")
 #' }
 getBulkVectorDataByRange <- function(vector_ids,
                                      start_release_date = "1901-01-01",
                                      end_release_date = as.Date(Sys.time())) {
+
+  # attempt to reformat nested lists and non-lists into a more useful form,
+  # at least to check arguments
+  vector_ids <- unique(unlist(vector_ids))
+
+  # return errors for malformed vector ids *before* calling the API
   check_vector_id(vector_ids)
 
   vector_ids <- sub("^v", "", vector_ids, ignore.case = TRUE) # converts to character
 
-  # etc
-  vectors_args <- paste0(
-    '"vectorIds":["',
-    paste(vector_ids, collapse = '","'),
-    '"]'
+  body <- list(
+    vectorIds = as.list(vector_ids),
+    startDataPointReleaseDate = stc_time(start_release_date),
+    endDataPointReleaseDate = stc_time(end_release_date)
   )
-
-  times_args <- paste0(
-    '"startDataPointReleaseDate":"', stc_time(start_release_date),
-    '","endDataPointReleaseDate":"', stc_time(end_release_date),
-    '"'
-  )
-
-  body <- paste0("{", vectors_args, ",", times_args, "}")
 
   httr::POST(
     url = "https://www150.statcan.gc.ca/t1/wds/rest/getBulkVectorDataByRange",
     body = body,
-    encode = "raw",
+    encode = "json",
     httr::add_headers("Content-Type" = "application/json")
   )
 }
