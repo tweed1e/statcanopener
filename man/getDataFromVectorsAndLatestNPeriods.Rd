@@ -4,14 +4,14 @@
 \alias{getDataFromVectorsAndLatestNPeriods}
 \title{Get changed series data from vector}
 \usage{
-getDataFromVectorsAndLatestNPeriods(vector_id, periods)
+getDataFromVectorsAndLatestNPeriods(...)
 }
 \arguments{
-\item{vector_id}{Vector is a short identifier to refer to a time series of
+\item{vectorId}{Vector is a short identifier to refer to a time series of
 data points. Unique variable length reference code, consisting of the
 letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)}
 
-\item{periods}{Number of periods to return, starting from the most recent
+\item{latestN}{Number of periods to return, starting from the most recent
 available data point.}
 }
 \value{
@@ -22,8 +22,6 @@ Get changed series data from vector
 }
 \examples{
 \dontrun{
-getDataFromVectorsAndLatestNPeriods("74804", 5)
-getDataFromVectorsAndLatestNPeriods("v74804", 5)
 getDataFromVectorsAndLatestNPeriods(74804, 5)
 }
 }

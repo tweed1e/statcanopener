@@ -17,7 +17,7 @@ Format date to \%Y-\%m-\%dT\%H:\%M, using Statcan's time zone
 }
 \examples{
 \dontrun{
-check_vector_id(42973393)
+stc_time("1999-01-27")
 }
 
 }

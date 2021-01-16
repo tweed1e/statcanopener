@@ -1,42 +1,106 @@
+wds_url <- "https://www150.statcan.gc.ca/t1/wds/rest/"
+
+#' Format json for API call
+#'
+#' Format json for API call
+#'
+#' @param ... List of parameters
+#' @return JSON
+#' @examples
+#' \dontrun{
+#'
+#' }
+#'
+format_wds_json <- function(...) {
+  UseMethod("format_wds_json")
+}
+
+format_wds_json.default <- function(x, ...) {
+  stop("No format_wds_json method for an object of class ", class(x),
+       call. = FALSE)
+}
+
+format_wds_json.numeric <- function(...) {
+  jsonlite::toJSON(list(list(...)), auto_unbox = TRUE)
+}
+
+format_wds_json.character <- function(...) {
+  jsonlite::toJSON(list(list(...)), auto_unbox = TRUE)
+}
+
+format_wds_json.list <- function(params) {
+  jsonlite::toJSON(params, auto_unbox = TRUE)
+}
+
+format_wds_json.data.frame <- function(params_df) {
+  jsonlite::toJSON(params_df, auto_unbox = TRUE)
+}
+
 #' Format date for API call
 #'
 #' Format date to %Y-%m-%dT%H:%M, using Statcan's time zone
 #'
 #' @param date A date
-#'
 #' @return Date with format %Y-%m-%dT%H:%M
-#'
 #' @examples
 #' \dontrun{
-#' check_vector_id(42973393)
+#' stc_time("1999-01-27")
 #' }
 #'
 stc_time <- function(date) {
   strftime(date, "%Y-%m-%dT%H:%M", tz = "America/Toronto")
 }
 
+#' POST utility
+#'
+#' @param url_func name of API function to be appended to wds_url
+#' @param body body of POST request in JSON format
+#' @return httr response object
+post <- function(url_func, ...) {
+  httr::POST(
+    url = paste0(wds_url, url_func),
+    body = format_wds_json(...),
+    encode = "raw",
+    httr::add_headers("Content-Type" = "application/json")
+  )
+}
+
+#' GET utility
+#'
+#' @param url_func Name of API function to be appended to wds_url
+#' @return httr response object
+get <- function(url_func) {
+  httr::GET(
+    url = paste0(wds_url, url_func),
+    encode = "raw",
+    httr::add_headers("Content-Type" = "application/json")
+  )
+}
+
 
 #' Check vector ID for errors
 #'
-#' Vector ID must satisfy: Vector number (i.e. 42973393 or v42973393).
+#' Vector ID must satisfy: Vector number (i.e. 42973393).
 #' Current max length: 10 digits Minimum length: 1.
 #'
 #' @param vector_id ID of the Vector that represents the time series
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_vector_id(42973393)
 #' }
 #'
 check_vector_id <- function(vector_id) {
-  if (!is.character(vector_id) & !is.numeric(vector_id)) {
-    stop(paste0("vector_id must be a character or numeric vector"), call. = FALSE)
+  if (!is.numeric(vector_id)) {
+    stop(paste0("Vector ID must be a positive integer between 1 and 10 digits"), call. = FALSE)
   }
 
-  if (!any(grepl("^v?[0-9]{1,10}$", vector_id, ignore.case = TRUE))) {
-    stop(paste0("vector_id must be a positive integer between 1 and 10 digits, with or without a v prefix."), call. = FALSE)
+  if (!all(vector_id > 0)) {
+    stop(paste0("Vector ID must be a positive integer between 1 and 10 digits"), call. = FALSE)
+  }
+
+  if (!any(grepl("^[0-9]{1,10}$", vector_id))) {
+    stop(paste0("Vector ID must be a positive integer between 1 and 10 digits"), call. = FALSE)
   }
 
   return(TRUE)
@@ -53,20 +117,18 @@ check_vector_id <- function(vector_id) {
 #' the simple view of a table/cube (i.e. 01)
 #'
 #' @param product_id ID of the product/table
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_product_id(1310008901)
 #' }
 check_product_id <- function(product_id) {
-  if (!is.character(product_id) & !is.numeric(product_id)) {
-    stop(paste0("product_id must be a character or numeric vector"), call. = FALSE)
+  if (!is.numeric(product_id)) {
+    stop(paste0("Product ID must be a numeric vector"), call. = FALSE)
   }
 
   if (!any(grepl("^([0-9]{8}|[0-9]{10})$", product_id))) {
-    stop(paste0("product_id must be an integer of length 8 or 10"), call. = FALSE)
+    stop(paste0("Product ID must be an integer of length 8 or 10"), call. = FALSE)
   }
 
   return(TRUE)
@@ -81,9 +143,7 @@ check_product_id <- function(product_id) {
 #' One value per dimension (i.e. 1.1.1.36.1.0.0.0.0.0)
 #'
 #' @param coordinate coordinate of the data point
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_coordinate("1.1.1.36.1.0.0.0.0.0")
@@ -92,8 +152,11 @@ check_coordinate <- function(coordinate) {
   if (!is.character(coordinate)) {
     stop(paste0("Coordinate must be a string"), call. = FALSE)
   }
+
   if (!any(grepl("^([0-9]+.){9}[0-9]+$", coordinate))) {
-    stop(paste0("Exactly 10 dimensions; a fixed length. One value per dimension (i.e. 1.1.1.36.1.0.0.0.0.0)"), call. = FALSE)
+    stop(paste0("Coordinate must have exactly 10 dimensions; a fixed length.
+                One value per dimension (i.e. 1.1.1.36.1.0.0.0.0.0)"),
+         call. = FALSE)
   }
 
   return(TRUE)
@@ -106,19 +169,17 @@ check_coordinate <- function(coordinate) {
 #' Periods must be a strictly positive integer.
 #'
 #' @param periods Number of periods
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_periods(10)
 #' }
 check_periods <- function(periods) {
-  if (!is.numeric(periods) | periods <= 0) {
+  if (!is.numeric(periods) | any(periods <= 0)) {
     stop(paste0("Period must be a positive integer"), call. = FALSE)
   }
 
-  if (floor(periods) != periods) {
+  if (any(floor(periods) != periods)) {
     stop(paste0("Period must be an integer"), call. = FALSE)
   }
 
@@ -142,7 +203,6 @@ check_vector_values <- function(value) {
 #' Extract vector data from httr content response and return as data.frame
 #'
 #' @param content_vector httr content response from getBulkVectorDataByRange call
-#'
 #' @return data.frame with 3 columns: vector_id, ref_date, value
 #'
 #' @examples
@@ -157,7 +217,7 @@ extract_vector <- function(content_vector) {
   # test that this is httr content from a getBulkVectorByRange call // ugh, it's not
   # check ref_dates, check value, check ID name
 
-  vector_id <- paste0("v", content_vector$object[["vectorId"]])
+  vector_id <- content_vector$object[["vectorId"]]
   vector_values <- content_vector$object[["vectorDataPoint"]]
 
   ref_date <- sapply(vector_values, `[[`, "refPer")
@@ -165,6 +225,7 @@ extract_vector <- function(content_vector) {
 
   check_vector_id(vector_id)
   check_vector_values(value)
+
   ref_date <- as.Date(ref_date) # throws error if not in the right format?
 
   data.frame(vector_id, ref_date, value, stringsAsFactors = FALSE)

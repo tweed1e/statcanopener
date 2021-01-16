@@ -13,25 +13,20 @@
 #' series of data points.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getChangedSeriesDataFromCubePidCoord(35100003, "1.12.0.0.0.0.0.0.0.0")
 #' }
 #'
 getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
-  check_product_id(product_id)
+  check_vector_id(product_id)
   check_coordinate(coordinate)
 
-  body <- paste0('[{"productId":', product_id, ',"coordinate":"', coordinate, '"}]')
-
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromCubePidCoord",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
+  post(
+    url_func = "getChangedSeriesDataFromCubePidCoord",
+    productId = product_id,
+    coordinate = coordinate
   )
 }
 
@@ -45,9 +40,7 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
 #' letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getChangedSeriesDataFromVector("74804")
@@ -56,22 +49,9 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
 #' }
 getChangedSeriesDataFromVector <- function(vector_id) {
   check_vector_id(vector_id)
-
-  vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
-
-  body <- paste0('[{"vectorId":', vector_id, "}]")
-
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesDataFromVector",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  post(url_func = "getChangedSeriesDataFromVector", vectorId = vector_id)
 }
 
-
-# For those who are looking to display data going back N reporting periods from today there are the following set of endpoints (methods). Both methods will return the same results. Our example uses the last three (3) reference periods.
-#
 
 #' Get changed series data
 #'
@@ -88,79 +68,94 @@ getChangedSeriesDataFromVector <- function(vector_id) {
 #' series of data points.
 #' @param periods Number of periods to return, starting from the most recent
 #' available data point.
-#'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getDataFromCubePidCoordAndLatestNPeriods(35100003, "1.12.0.0.0.0.0.0.0.0", 10)
 #' }
 #'
-getDataFromCubePidCoordAndLatestNPeriods <- function(product_id, coordinate, periods) {
-  check_product_id(product_id)
-  check_periods(periods)
+getDataFromCubePidCoordAndLatestNPeriods <- function(...) {
+  UseMethod("getDataFromCubePidCoordAndLatestNPeriods")
+}
+
+#' @export
+getDataFromCubePidCoordAndLatestNPeriods.numeric <- function(productId, coordinate, latestN = 10) {
+  check_product_id(productId)
   check_coordinate(coordinate)
+  check_periods(latestN)
 
-  body <- paste0(
-    '[{"productId":', product_id,
-    ',"coordinate":"', coordinate,
-    '","latestN":', periods, "}]"
+  post(
+    url_func = "getDataFromCubePidCoordAndLatestNPeriods",
+    productId = productId,
+    coordinate = coordinate,
+    latestN = latestN
   )
+}
 
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+#' @export
+getDataFromCubePidCoordAndLatestNPeriods.data.frame <- function(product_df) {
+
+  if (!all(names(product_df) %in% c("productId", "coordinate", "latestN"))) {
+    stop("product_df must have columns named productId, coordinate, and latestN")
+  }
+
+  check_product_id(product_df[["productId"]])
+  check_coordinate(product_df[["coordinate"]])
+  check_periods(product_df[["latestN"]])
+
+  product_df <- product_df[c("productId", "coordinate", "latestN")]
+
+  post(url_func = "getDataFromCubePidCoordAndLatestNPeriods", product_df)
 }
 
 
 
 
-
 #' Get changed series data from vector
 #'
 #' Get changed series data from vector
 #'
-#' @param vector_id Vector is a short identifier to refer to a time series of
+#' @param vectorId Vector is a short identifier to refer to a time series of
 #' data points. Unique variable length reference code, consisting of the
 #' letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)
-#' @param periods Number of periods to return, starting from the most recent
+#' @param latestN Number of periods to return, starting from the most recent
 #' available data point.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
-#' getDataFromVectorsAndLatestNPeriods("74804", 5)
-#' getDataFromVectorsAndLatestNPeriods("v74804", 5)
 #' getDataFromVectorsAndLatestNPeriods(74804, 5)
 #' }
-getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
-  check_vector_id(vector_id)
-  check_periods(periods)
+getDataFromVectorsAndLatestNPeriods <- function(...) {
+  UseMethod("getDataFromVectorsAndLatestNPeriods")
+}
 
-  vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
+#' @export
+getDataFromVectorsAndLatestNPeriods.numeric <- function(vectorId, latestN = 10) {
 
-  # can take multiple vectors but each has the same [{"vectorId":1,"latestN":1}, ...]
-
-  body <- paste0('[{"vectorId":', vector_id, ',"latestN":', periods, "}]")
-
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorsAndLatestNPeriods",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
+  post(
+    url_func = "getDataFromVectorsAndLatestNPeriods",
+    vectorId = vectorId,
+    latestN = latestN
   )
 }
 
+#' @export
+getDataFromVectorsAndLatestNPeriods.data.frame <- function(vector_df) {
 
+  if (!all(names(vector_df) %in% c("vectorId", "latestN"))) {
+    stop("vector_df must have columns named vectorId and latestN")
+  }
 
+  check_vector_id(vector_df[["vectorId"]])
+  check_periods(vector_df[["latestN"]])
+
+  vector_df <- vector_df[c("vectorId", "latestN")]
+
+  post(url_func = "getDataFromVectorsAndLatestNPeriods", vector_df)
+}
 
 #' Download a vector
 #'
@@ -177,46 +172,23 @@ getDataFromVectorsAndLatestNPeriods <- function(vector_id, periods) {
 #' behind the most recent reference date of the data by months or years.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
-#' getBulkVectorDataByRange("74804")
-#' getBulkVectorDataByRange("v74804")
 #' getBulkVectorDataByRange(74804)
+#' getBulkVectorDataByRange(c(74804, 1))
 #' }
-getBulkVectorDataByRange <- function(vector_ids,
-                                     start_release_date = "1901-01-01",
-                                     end_release_date = as.Date(Sys.time())) {
+getBulkVectorDataByRange <- function(vector_ids) {
   check_vector_id(vector_ids)
 
-  vector_ids <- sub("^v", "", vector_ids, ignore.case = TRUE) # converts to character
-
-  # etc
-  vectors_args <- paste0(
-    '"vectorIds":["',
-    paste(vector_ids, collapse = '","'),
-    '"]'
+  params <- list(
+    vectorIds = as.list(as.character(vector_ids)),
+    startDataPointReleaseDate = stc_time("1901-01-01"),
+    endDataPointReleaseDate = stc_time(as.Date(Sys.time()))
   )
 
-  times_args <- paste0(
-    '"startDataPointReleaseDate":"', stc_time(start_release_date),
-    '","endDataPointReleaseDate":"', stc_time(end_release_date),
-    '"'
-  )
-
-  body <- paste0("{", vectors_args, ",", times_args, "}")
-
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getBulkVectorDataByRange",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  post(url_func = "getBulkVectorDataByRange", params)
 }
-
-
 
 
 #' Get full table download link in CSV format
@@ -231,11 +203,8 @@ getBulkVectorDataByRange <- function(vector_ids,
 #' itself.
 #'
 #' @param language 'en' for English or 'fr' for French
-#'
 #' @export
-#'
 #' @return A direct link to download the table in CSV format
-#'
 #' @examples
 #' \dontrun{
 #' getFullTableDownloadCSV(35100003, "fr")
@@ -245,15 +214,11 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 
   if (!language %in% c("en", "fr")) {
     stop(paste0("Language must be either 'en' or 'fr'."), call. = FALSE)
-  } # return actual class in message
+  }
 
-  url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadCSV/", product_id, "/", language)
+  url_func <- paste0("getFullTableDownloadCSV/", product_id, "/", language)
 
-  httr::GET(
-    url = url,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  get(url_func)
 }
 
 
@@ -270,9 +235,7 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 #' itself.
 #'
 #' @export
-#'
 #' @return A direct link to download the table in SDMX format
-#'
 #' @examples
 #' \dontrun{
 #' getFullTableDownloadSDMX(35100003)
@@ -280,11 +243,7 @@ getFullTableDownloadCSV <- function(product_id, language = c("en", "fr")) {
 getFullTableDownloadSDMX <- function(product_id) {
   check_product_id(product_id)
 
-  url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getFullTableDownloadSDMX/", product_id)
+  url_func <- paste0("getFullTableDownloadSDMX/", product_id)
 
-  httr::GET(
-    url = url,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  get(url_func)
 }

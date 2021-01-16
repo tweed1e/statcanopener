@@ -13,7 +13,7 @@ check_vector_id(vector_id)
 TRUE
 }
 \description{
-Vector ID must satisfy: Vector number (i.e. 42973393 or v42973393).
+Vector ID must satisfy: Vector number (i.e. 42973393).
 Current max length: 10 digits Minimum length: 1.
 }
 \examples{

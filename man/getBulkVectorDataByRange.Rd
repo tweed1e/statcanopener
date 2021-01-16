@@ -4,11 +4,7 @@
 \alias{getBulkVectorDataByRange}
 \title{Download a vector}
 \usage{
-getBulkVectorDataByRange(
-  vector_ids,
-  start_release_date = "1901-01-01",
-  end_release_date = as.Date(Sys.time())
-)
+getBulkVectorDataByRange(vector_ids)
 }
 \arguments{
 \item{vector_ids}{Vector is a short identifier to refer to a time series of
@@ -31,8 +27,7 @@ Download a vector
 }
 \examples{
 \dontrun{
-getBulkVectorDataByRange("74804")
-getBulkVectorDataByRange("v74804")
 getBulkVectorDataByRange(74804)
+getBulkVectorDataByRange(c(74804, 1))
 }
 }

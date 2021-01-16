@@ -10,27 +10,14 @@
 #' itself.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getCubeMetadata(35100003)
 #' }
 getCubeMetadata <- function(product_id) {
-  check_product_id(product_id)
-
-  body <- paste0('[{"productId":', product_id, "}]")
-
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getCubeMetadata",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  post(url_func = "getCubeMetadata", productId = product_id)
 }
-
-
 
 
 #' Get list of all available data tables
@@ -41,19 +28,13 @@ getCubeMetadata <- function(product_id) {
 #' information at the dimension level.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getAllCubesList()
 #' }
 getAllCubesList <- function() {
-  httr::GET(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getAllCubesList",
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  get("getAllCubesList")
 }
 
 
@@ -66,19 +47,13 @@ getAllCubesList <- function() {
 #' not return dimension or footnote information.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getAllCubesListLite()
 #' }
 getAllCubesListLite <- function() {
-  httr::GET(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getAllCubesListLite",
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  get("getAllCubesListLite")
 }
 
 
@@ -98,9 +73,7 @@ getAllCubesListLite <- function() {
 #'  series of data points.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getSeriesInfoFromCubePidCoord(35100003, "1.12.0.0.0.0.0.0.0.0")
@@ -110,17 +83,12 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
   check_product_id(product_id)
   check_coordinate(coordinate)
 
-  body <- paste0('[{"productId":', product_id, ',"coordinate":"', coordinate, '"}]')
-
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getSeriesInfoFromCubePidCoord",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
+  post(
+    url_func = "getSeriesInfoFromCubePidCoord",
+    productId = product_id,
+    coordinate = coordinate
   )
 }
-
-
 
 
 #' Get series metadata from vector ID
@@ -132,9 +100,7 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #' letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \dontrun{
 #' getSeriesInfoFromVector(32164132)
@@ -142,15 +108,5 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #'
 getSeriesInfoFromVector <- function(vector_id) {
   check_vector_id(vector_id)
-
-  vector_id <- sub("^v", "", vector_id, ignore.case = TRUE) # converts to character
-
-  body <- paste0('[{"vectorId":', vector_id, "}]")
-
-  httr::POST(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getSeriesInfoFromVector",
-    body = body,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  post(url_func = "getSeriesInfoFromVector", vectorId = vector_id)
 }

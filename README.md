@@ -25,7 +25,7 @@ You can install the development version of statcanopener from
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("tweed1e/statcanopener)
+remotes::install_github("tweed1e/statcanopener")
 ```
 
 ## Example
