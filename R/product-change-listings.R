@@ -10,19 +10,13 @@
 #' date from today into the past.
 #'
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \donttest{
 #' getChangedSeriesList()
 #' }
 getChangedSeriesList <- function() {
-  httr::GET(
-    url = "https://www150.statcan.gc.ca/t1/wds/rest/getChangedSeriesList",
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  get("getChangedSeriesList")
 }
 
 
@@ -38,22 +32,13 @@ getChangedSeriesList <- function() {
 #'
 #' @param date Date in format YYYY-MM-DD
 #' @export
-#'
 #' @return An httr response object
-#'
 #' @examples
 #' \donttest{
-#' getChangedCubeList()
+#' getChangedCubeList("2019-01-01")
 #' }
-getChangedCubeList <- function(date = "") {
-
+getChangedCubeList <- function(date) {
   # check date format is YYYY-MM-DD
-
-  url <- paste0("https://www150.statcan.gc.ca/t1/wds/rest/getChangedCubeList/2017-12-07", date)
-
-  httr::GET(
-    url = url,
-    encode = "raw",
-    httr::add_headers("Content-Type" = "application/json")
-  )
+  # right now probably won't work if date not specified?
+  get(paste0("getChangedCubeList/", date))
 }

@@ -4,7 +4,7 @@
 \alias{getChangedCubeList}
 \title{Get list of changed cubes/tables}
 \usage{
-getChangedCubeList(date = "")
+getChangedCubeList(date)
 }
 \arguments{
 \item{date}{Date in format YYYY-MM-DD}
@@ -22,6 +22,6 @@ date from today into the past.
 }
 \examples{
 \donttest{
-getChangedCubeList()
+getChangedCubeList("2019-01-01")
 }
 }

@@ -4,7 +4,7 @@
 \alias{getDataFromCubePidCoordAndLatestNPeriods}
 \title{Get changed series data}
 \usage{
-getDataFromCubePidCoordAndLatestNPeriods(product_id, coordinate, periods)
+getDataFromCubePidCoordAndLatestNPeriods(...)
 }
 \arguments{
 \item{product_id}{Product Identification number (PID) is a unique product

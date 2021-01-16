@@ -1,18 +1,72 @@
+wds_url <- "https://www150.statcan.gc.ca/t1/wds/rest/"
+
+#' Format json for API call
+#'
+#' Format json for API call
+#'
+#' @param ... List of parameters
+#' @return JSON
+#' @examples
+#' \dontrun{
+#'
+#' }
+#'
+format_wds_json <- function(...) {
+  UseMethod("format_wds_json")
+}
+
+format_wds_json.default <- function(x, ...) {
+  stop("No format_wds_json method for an object of class ", class(x),
+       call. = FALSE)
+}
+
+format_wds_json.list <- function(params) {
+  jsonlite::toJSON(list(params), auto_unbox = TRUE)
+}
+
+format_wds_json.data.frame <- function(df) {
+  jsonlite::toJSON(df, auto_unbox = TRUE)
+}
+
 #' Format date for API call
 #'
 #' Format date to %Y-%m-%dT%H:%M, using Statcan's time zone
 #'
 #' @param date A date
-#'
 #' @return Date with format %Y-%m-%dT%H:%M
-#'
 #' @examples
 #' \dontrun{
-#' check_vector_id(42973393)
+#' stc_time("1999-01-27")
 #' }
 #'
 stc_time <- function(date) {
   strftime(date, "%Y-%m-%dT%H:%M", tz = "America/Toronto")
+}
+
+#' POST utility
+#'
+#' @param url_func name of API function to be appended to wds_url
+#' @param body body of POST request in JSON format
+#' @return httr response object
+post <- function(url_func, ...) {
+  httr::POST(
+    url = paste0(wds_url, url_func),
+    body = format_wds_json(...),
+    encode = "raw",
+    httr::add_headers("Content-Type" = "application/json")
+  )
+}
+
+#' GET utility
+#'
+#' @param url_func Name of API function to be appended to wds_url
+#' @return httr response object
+get <- function(url_func) {
+  httr::GET(
+    url = paste0(wds_url, url_func),
+    encode = "raw",
+    httr::add_headers("Content-Type" = "application/json")
+  )
 }
 
 
@@ -22,9 +76,7 @@ stc_time <- function(date) {
 #' Current max length: 10 digits Minimum length: 1.
 #'
 #' @param vector_id ID of the Vector that represents the time series
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_vector_id(42973393)
@@ -53,9 +105,7 @@ check_vector_id <- function(vector_id) {
 #' the simple view of a table/cube (i.e. 01)
 #'
 #' @param product_id ID of the product/table
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_product_id(1310008901)
@@ -81,9 +131,7 @@ check_product_id <- function(product_id) {
 #' One value per dimension (i.e. 1.1.1.36.1.0.0.0.0.0)
 #'
 #' @param coordinate coordinate of the data point
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_coordinate("1.1.1.36.1.0.0.0.0.0")
@@ -106,9 +154,7 @@ check_coordinate <- function(coordinate) {
 #' Periods must be a strictly positive integer.
 #'
 #' @param periods Number of periods
-#'
 #' @return TRUE
-#'
 #' @examples
 #' \dontrun{
 #' check_periods(10)
@@ -142,7 +188,6 @@ check_vector_values <- function(value) {
 #' Extract vector data from httr content response and return as data.frame
 #'
 #' @param content_vector httr content response from getBulkVectorDataByRange call
-#'
 #' @return data.frame with 3 columns: vector_id, ref_date, value
 #'
 #' @examples
