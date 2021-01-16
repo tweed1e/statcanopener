@@ -45,7 +45,7 @@ test_that("getDataFromVectorsAndLatestNPeriods doesn't return an http_error", {
 
 
 
-response <- getBulkVectorDataByRange("v113411623")
+response <- getBulkVectorDataByRange(32164132)
 
 test_that("getBulkVectorDataByRange doesn't return an http_error", {
   skip_on_cran()

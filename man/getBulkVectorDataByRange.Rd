@@ -27,8 +27,6 @@ Download a vector
 }
 \examples{
 \dontrun{
-getBulkVectorDataByRange("74804")
-getBulkVectorDataByRange("v74804")
 getBulkVectorDataByRange(74804)
 getBulkVectorDataByRange(c(74804, 1))
 }

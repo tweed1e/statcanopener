@@ -20,12 +20,20 @@ format_wds_json.default <- function(x, ...) {
        call. = FALSE)
 }
 
-format_wds_json.list <- function(params) {
-  jsonlite::toJSON(list(params), auto_unbox = TRUE)
+format_wds_json.numeric <- function(...) {
+  jsonlite::toJSON(list(list(...)), auto_unbox = TRUE)
 }
 
-format_wds_json.data.frame <- function(df) {
-  jsonlite::toJSON(df, auto_unbox = TRUE)
+format_wds_json.character <- function(...) {
+  jsonlite::toJSON(list(list(...)), auto_unbox = TRUE)
+}
+
+format_wds_json.list <- function(params) {
+  jsonlite::toJSON(params, auto_unbox = TRUE)
+}
+
+format_wds_json.data.frame <- function(params_df) {
+  jsonlite::toJSON(params_df, auto_unbox = TRUE)
 }
 
 #' Format date for API call
@@ -72,7 +80,7 @@ get <- function(url_func) {
 
 #' Check vector ID for errors
 #'
-#' Vector ID must satisfy: Vector number (i.e. 42973393 or v42973393).
+#' Vector ID must satisfy: Vector number (i.e. 42973393).
 #' Current max length: 10 digits Minimum length: 1.
 #'
 #' @param vector_id ID of the Vector that represents the time series
@@ -83,12 +91,16 @@ get <- function(url_func) {
 #' }
 #'
 check_vector_id <- function(vector_id) {
-  if (!is.character(vector_id) & !is.numeric(vector_id)) {
-    stop(paste0("vector_id must be a character or numeric vector"), call. = FALSE)
+  if (!is.numeric(vector_id)) {
+    stop(paste0("Vector ID must be a positive integer between 1 and 10 digits"), call. = FALSE)
   }
 
-  if (!any(grepl("^v?[0-9]{1,10}$", vector_id, ignore.case = TRUE))) {
-    stop(paste0("vector_id must be a positive integer between 1 and 10 digits, with or without a v prefix."), call. = FALSE)
+  if (!all(vector_id > 0)) {
+    stop(paste0("Vector ID must be a positive integer between 1 and 10 digits"), call. = FALSE)
+  }
+
+  if (!any(grepl("^[0-9]{1,10}$", vector_id))) {
+    stop(paste0("Vector ID must be a positive integer between 1 and 10 digits"), call. = FALSE)
   }
 
   return(TRUE)
@@ -111,12 +123,12 @@ check_vector_id <- function(vector_id) {
 #' check_product_id(1310008901)
 #' }
 check_product_id <- function(product_id) {
-  if (!is.character(product_id) & !is.numeric(product_id)) {
-    stop(paste0("product_id must be a character or numeric vector"), call. = FALSE)
+  if (!is.numeric(product_id)) {
+    stop(paste0("Product ID must be a numeric vector"), call. = FALSE)
   }
 
   if (!any(grepl("^([0-9]{8}|[0-9]{10})$", product_id))) {
-    stop(paste0("product_id must be an integer of length 8 or 10"), call. = FALSE)
+    stop(paste0("Product ID must be an integer of length 8 or 10"), call. = FALSE)
   }
 
   return(TRUE)
@@ -140,8 +152,11 @@ check_coordinate <- function(coordinate) {
   if (!is.character(coordinate)) {
     stop(paste0("Coordinate must be a string"), call. = FALSE)
   }
+
   if (!any(grepl("^([0-9]+.){9}[0-9]+$", coordinate))) {
-    stop(paste0("Exactly 10 dimensions; a fixed length. One value per dimension (i.e. 1.1.1.36.1.0.0.0.0.0)"), call. = FALSE)
+    stop(paste0("Coordinate must have exactly 10 dimensions; a fixed length.
+                One value per dimension (i.e. 1.1.1.36.1.0.0.0.0.0)"),
+         call. = FALSE)
   }
 
   return(TRUE)
@@ -160,11 +175,11 @@ check_coordinate <- function(coordinate) {
 #' check_periods(10)
 #' }
 check_periods <- function(periods) {
-  if (!is.numeric(periods) | periods <= 0) {
+  if (!is.numeric(periods) | any(periods <= 0)) {
     stop(paste0("Period must be a positive integer"), call. = FALSE)
   }
 
-  if (floor(periods) != periods) {
+  if (any(floor(periods) != periods)) {
     stop(paste0("Period must be an integer"), call. = FALSE)
   }
 
@@ -202,7 +217,7 @@ extract_vector <- function(content_vector) {
   # test that this is httr content from a getBulkVectorByRange call // ugh, it's not
   # check ref_dates, check value, check ID name
 
-  vector_id <- paste0("v", content_vector$object[["vectorId"]])
+  vector_id <- content_vector$object[["vectorId"]]
   vector_values <- content_vector$object[["vectorDataPoint"]]
 
   ref_date <- sapply(vector_values, `[[`, "refPer")
@@ -210,6 +225,7 @@ extract_vector <- function(content_vector) {
 
   check_vector_id(vector_id)
   check_vector_values(value)
+
   ref_date <- as.Date(ref_date) # throws error if not in the right format?
 
   data.frame(vector_id, ref_date, value, stringsAsFactors = FALSE)

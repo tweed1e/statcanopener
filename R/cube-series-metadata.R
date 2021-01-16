@@ -16,7 +16,7 @@
 #' getCubeMetadata(35100003)
 #' }
 getCubeMetadata <- function(product_id) {
-  post(url_func = "getCubeMetadata", list(productId = product_id))
+  post(url_func = "getCubeMetadata", productId = product_id)
 }
 
 
@@ -80,9 +80,13 @@ getAllCubesListLite <- function() {
 #' }
 #'
 getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
+  check_product_id(product_id)
+  check_coordinate(coordinate)
+
   post(
     url_func = "getSeriesInfoFromCubePidCoord",
-    list(productId = product_id, coordinate = coordinate)
+    productId = product_id,
+    coordinate = coordinate
   )
 }
 
@@ -103,5 +107,6 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #' }
 #'
 getSeriesInfoFromVector <- function(vector_id) {
-  post(url_func = "getSeriesInfoFromVector", list(vectorId = vector_id))
+  check_vector_id(vector_id)
+  post(url_func = "getSeriesInfoFromVector", vectorId = vector_id)
 }

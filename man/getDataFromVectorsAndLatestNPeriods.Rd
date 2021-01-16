@@ -22,8 +22,6 @@ Get changed series data from vector
 }
 \examples{
 \dontrun{
-getDataFromVectorsAndLatestNPeriods("74804", 5)
-getDataFromVectorsAndLatestNPeriods("v74804", 5)
 getDataFromVectorsAndLatestNPeriods(74804, 5)
 }
 }

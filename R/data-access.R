@@ -20,9 +20,13 @@
 #' }
 #'
 getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
+  check_vector_id(product_id)
+  check_coordinate(coordinate)
+
   post(
     url_func = "getChangedSeriesDataFromCubePidCoord",
-    list(productId = product_id, coordinate = coordinate)
+    productId = product_id,
+    coordinate = coordinate
   )
 }
 
@@ -44,7 +48,8 @@ getChangedSeriesDataFromCubePidCoord <- function(product_id, coordinate) {
 #' getChangedSeriesDataFromVector(74804)
 #' }
 getChangedSeriesDataFromVector <- function(vector_id) {
-  post(url_func = "getChangedSeriesDataFromVector", list(vectorId = vector_id))
+  check_vector_id(vector_id)
+  post(url_func = "getChangedSeriesDataFromVector", vectorId = vector_id)
 }
 
 
@@ -75,20 +80,32 @@ getDataFromCubePidCoordAndLatestNPeriods <- function(...) {
 }
 
 #' @export
-getDataFromCubePidCoordAndLatestNPeriods.default <- function(productId, coordinate, latestN = 10) {
-  if (!class(productId) %in% c("numeric", "character")) {
-    stop("No applicable method applied to an object of class ", class(productId))
-    # or say must pass atomic or data.frame? also need to check atomic
-  }
+getDataFromCubePidCoordAndLatestNPeriods.numeric <- function(productId, coordinate, latestN = 10) {
+  check_product_id(productId)
+  check_coordinate(coordinate)
+  check_periods(latestN)
 
   post(
     url_func = "getDataFromCubePidCoordAndLatestNPeriods",
-    list(productId = productId, coordinate = coordinate, latestN = latestN)
+    productId = productId,
+    coordinate = coordinate,
+    latestN = latestN
   )
 }
 
 #' @export
 getDataFromCubePidCoordAndLatestNPeriods.data.frame <- function(product_df) {
+
+  if (!all(names(product_df) %in% c("productId", "coordinate", "latestN"))) {
+    stop("product_df must have columns named productId, coordinate, and latestN")
+  }
+
+  check_product_id(product_df[["productId"]])
+  check_coordinate(product_df[["coordinate"]])
+  check_periods(product_df[["latestN"]])
+
+  product_df <- product_df[c("productId", "coordinate", "latestN")]
+
   post(url_func = "getDataFromCubePidCoordAndLatestNPeriods", product_df)
 }
 
@@ -109,8 +126,6 @@ getDataFromCubePidCoordAndLatestNPeriods.data.frame <- function(product_df) {
 #' @return An httr response object
 #' @examples
 #' \dontrun{
-#' getDataFromVectorsAndLatestNPeriods("74804", 5)
-#' getDataFromVectorsAndLatestNPeriods("v74804", 5)
 #' getDataFromVectorsAndLatestNPeriods(74804, 5)
 #' }
 getDataFromVectorsAndLatestNPeriods <- function(...) {
@@ -118,19 +133,27 @@ getDataFromVectorsAndLatestNPeriods <- function(...) {
 }
 
 #' @export
-getDataFromVectorsAndLatestNPeriods.default <- function(vectorId, latestN = 10) {
-  if (!class(vectorId) %in% c("numeric", "character")) {
-    stop("No applicable method applied to an object of class ", class(vectorId))
-  }
+getDataFromVectorsAndLatestNPeriods.numeric <- function(vectorId, latestN = 10) {
 
   post(
     url_func = "getDataFromVectorsAndLatestNPeriods",
-    list(vectorId = vectorId, latestN = latestN)
+    vectorId = vectorId,
+    latestN = latestN
   )
 }
 
 #' @export
 getDataFromVectorsAndLatestNPeriods.data.frame <- function(vector_df) {
+
+  if (!all(names(vector_df) %in% c("vectorId", "latestN"))) {
+    stop("vector_df must have columns named vectorId and latestN")
+  }
+
+  check_vector_id(vector_df[["vectorId"]])
+  check_periods(vector_df[["latestN"]])
+
+  vector_df <- vector_df[c("vectorId", "latestN")]
+
   post(url_func = "getDataFromVectorsAndLatestNPeriods", vector_df)
 }
 
@@ -152,12 +175,11 @@ getDataFromVectorsAndLatestNPeriods.data.frame <- function(vector_df) {
 #' @return An httr response object
 #' @examples
 #' \dontrun{
-#' getBulkVectorDataByRange("74804")
-#' getBulkVectorDataByRange("v74804")
 #' getBulkVectorDataByRange(74804)
 #' getBulkVectorDataByRange(c(74804, 1))
 #' }
 getBulkVectorDataByRange <- function(vector_ids) {
+  check_vector_id(vector_ids)
 
   params <- list(
     vectorIds = as.list(as.character(vector_ids)),
