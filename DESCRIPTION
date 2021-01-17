@@ -1,13 +1,12 @@
 Package: statcanopener
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: An R wrapper for Statistics Canada's Web Data Service
+Version: 0.0.0.90
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Jesse",
+           family = "Tweedle",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "jesse.tweedle@canada.ca")
+Description: An R wrapper for Statistics Canada's Web Data Service.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -18,5 +17,6 @@ Suggests:
     knitr,
     rmarkdown
 Imports: 
-    httr
+    httr,
+    jsonlite
 VignetteBuilder: knitr

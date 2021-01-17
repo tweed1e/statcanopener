@@ -4,10 +4,10 @@
 \alias{getCubeMetadata}
 \title{Get cube/table metadata}
 \usage{
-getCubeMetadata(product_id)
+getCubeMetadata(productId)
 }
 \arguments{
-\item{product_id}{Product Identification number (PID) is a unique product
+\item{productId}{Product Identification number (PID) is a unique product
 identifier for all Statistics Canada products, including large
 multidimensional tables. The first two digits refer to a subject, the next
 two digits refer to product type, the last four digits refer to the product

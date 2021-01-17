@@ -4,10 +4,10 @@
 \alias{getSeriesInfoFromVector}
 \title{Get series metadata from vector ID}
 \usage{
-getSeriesInfoFromVector(vector_id)
+getSeriesInfoFromVector(vectorId)
 }
 \arguments{
-\item{vector_id}{Vector is a short identifier to refer to a time series of
+\item{vectorId}{Vector is a short identifier to refer to a time series of
 data points. Unique variable length reference code, consisting of the
 letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)}
 }
@@ -21,5 +21,4 @@ Get series titles, product ID, CANSIM ID, release date, and more.
 \dontrun{
 getSeriesInfoFromVector(32164132)
 }
-
 }

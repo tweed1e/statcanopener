@@ -4,10 +4,10 @@
 \alias{getDataFromCubePidCoordAndLatestNPeriods}
 \title{Get changed series data}
 \usage{
-getDataFromCubePidCoordAndLatestNPeriods(...)
+getDataFromCubePidCoordAndLatestNPeriods(productId, coordinate, latestN)
 }
 \arguments{
-\item{product_id}{Product Identification number (PID) is a unique product
+\item{productId}{Product Identification number (PID) is a unique product
 identifier for all Statistics Canada products, including large
 multidimensional tables. The first two digits refer to a subject, the next
 two digits refer to product type, the last four digits refer to the product
@@ -18,7 +18,7 @@ each dimension. One value per dimension. (i.e. "1.3.1.1.1.1.0.0.0.0" ) A
 table PID number combined with a coordinate will identify a unique time
 series of data points.}
 
-\item{periods}{Number of periods to return, starting from the most recent
+\item{latestN}{Number of periods to return, starting from the most recent
 available data point.}
 }
 \value{

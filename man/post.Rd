@@ -9,7 +9,7 @@ post(url_func, ...)
 \arguments{
 \item{url_func}{name of API function to be appended to wds_url}
 
-\item{body}{body of POST request in JSON format}
+\item{...}{body of POST request, as named arguments or a dataframe}
 }
 \value{
 httr response object
