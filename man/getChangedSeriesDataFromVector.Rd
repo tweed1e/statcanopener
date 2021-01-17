@@ -4,10 +4,10 @@
 \alias{getChangedSeriesDataFromVector}
 \title{Get changed series data from vector}
 \usage{
-getChangedSeriesDataFromVector(vector_id)
+getChangedSeriesDataFromVector(vectorId)
 }
 \arguments{
-\item{vector_id}{Vector is a short identifier to refer to a time series of
+\item{vectorId}{Vector is a short identifier to refer to a time series of
 data points. Unique variable length reference code, consisting of the
 letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)}
 }
@@ -19,8 +19,6 @@ Get changed series data from vector
 }
 \examples{
 \dontrun{
-getChangedSeriesDataFromVector("74804")
-getChangedSeriesDataFromVector("v74804")
 getChangedSeriesDataFromVector(74804)
 }
 }

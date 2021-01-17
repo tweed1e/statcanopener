@@ -4,7 +4,7 @@
 \alias{getDataFromVectorsAndLatestNPeriods}
 \title{Get changed series data from vector}
 \usage{
-getDataFromVectorsAndLatestNPeriods(...)
+getDataFromVectorsAndLatestNPeriods(vectorId, latestN)
 }
 \arguments{
 \item{vectorId}{Vector is a short identifier to refer to a time series of

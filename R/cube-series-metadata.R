@@ -3,7 +3,7 @@
 #'
 #' Get cube/table titles, product ID, CANSIM ID, release date, and more.
 #'
-#' @param product_id Product Identification number (PID) is a unique product
+#' @param productId Product Identification number (PID) is a unique product
 #' identifier for all Statistics Canada products, including large
 #' multidimensional tables. The first two digits refer to a subject, the next
 #' two digits refer to product type, the last four digits refer to the product
@@ -15,8 +15,12 @@
 #' \dontrun{
 #' getCubeMetadata(35100003)
 #' }
-getCubeMetadata <- function(product_id) {
-  post(url_func = "getCubeMetadata", productId = product_id)
+getCubeMetadata <- function(productId) {
+  check_product_id(productId)
+
+  params_df <- data.frame(productId = productId)
+
+  post(url_func = "getCubeMetadata", params_df)
 }
 
 
@@ -62,7 +66,7 @@ getAllCubesListLite <- function() {
 #'
 #' Get series titles, product ID, CANSIM ID, release date, and more.
 #'
-#' @param product_id Product Identification number (PID) is a unique product
+#' @param productId Product Identification number (PID) is a unique product
 #' identifier for all Statistics Canada products, including large
 #' multidimensional tables. The first two digits refer to a subject, the next
 #' two digits refer to product type, the last four digits refer to the product
@@ -79,15 +83,13 @@ getAllCubesListLite <- function() {
 #' getSeriesInfoFromCubePidCoord(35100003, "1.12.0.0.0.0.0.0.0.0")
 #' }
 #'
-getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
-  check_product_id(product_id)
+getSeriesInfoFromCubePidCoord <- function(productId, coordinate) {
+  check_product_id(productId)
   check_coordinate(coordinate)
 
-  post(
-    url_func = "getSeriesInfoFromCubePidCoord",
-    productId = product_id,
-    coordinate = coordinate
-  )
+  params_df <- data.frame(productId = productId, coordinate = coordinate)
+
+  post(url_func = "getSeriesInfoFromCubePidCoord", params_df)
 }
 
 
@@ -95,7 +97,7 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #'
 #' Get series titles, product ID, CANSIM ID, release date, and more.
 #'
-#' @param vector_id Vector is a short identifier to refer to a time series of
+#' @param vectorId Vector is a short identifier to refer to a time series of
 #' data points. Unique variable length reference code, consisting of the
 #' letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)
 #'
@@ -105,8 +107,10 @@ getSeriesInfoFromCubePidCoord <- function(product_id, coordinate) {
 #' \dontrun{
 #' getSeriesInfoFromVector(32164132)
 #' }
-#'
-getSeriesInfoFromVector <- function(vector_id) {
-  check_vector_id(vector_id)
-  post(url_func = "getSeriesInfoFromVector", vectorId = vector_id)
+getSeriesInfoFromVector <- function(vectorId) {
+  check_vector_id(vectorId)
+
+  params_df <- data.frame(vectorId = vectorId)
+
+  post(url_func = "getSeriesInfoFromVector", params_df)
 }

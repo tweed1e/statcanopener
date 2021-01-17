@@ -15,25 +15,16 @@ format_wds_json <- function(...) {
   UseMethod("format_wds_json")
 }
 
-format_wds_json.default <- function(x, ...) {
-  stop("No format_wds_json method for an object of class ", class(x),
-       call. = FALSE)
-}
-
-format_wds_json.numeric <- function(...) {
+format_wds_json.default <- function(...) {
   jsonlite::toJSON(list(list(...)), auto_unbox = TRUE)
 }
 
-format_wds_json.character <- function(...) {
-  jsonlite::toJSON(list(list(...)), auto_unbox = TRUE)
+format_wds_json.list <- function(...) {
+  jsonlite::toJSON(..., auto_unbox = TRUE)
 }
 
-format_wds_json.list <- function(params) {
-  jsonlite::toJSON(params, auto_unbox = TRUE)
-}
-
-format_wds_json.data.frame <- function(params_df) {
-  jsonlite::toJSON(params_df, auto_unbox = TRUE)
+format_wds_json.data.frame <- function(...) {
+  jsonlite::toJSON(..., auto_unbox = TRUE)
 }
 
 #' Format date for API call
@@ -54,7 +45,7 @@ stc_time <- function(date) {
 #' POST utility
 #'
 #' @param url_func name of API function to be appended to wds_url
-#' @param body body of POST request in JSON format
+#' @param ... body of POST request, as named arguments or a dataframe
 #' @return httr response object
 post <- function(url_func, ...) {
   httr::POST(

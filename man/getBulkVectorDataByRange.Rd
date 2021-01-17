@@ -4,20 +4,12 @@
 \alias{getBulkVectorDataByRange}
 \title{Download a vector}
 \usage{
-getBulkVectorDataByRange(vector_ids)
+getBulkVectorDataByRange(vectorIds)
 }
 \arguments{
-\item{vector_ids}{Vector is a short identifier to refer to a time series of
-data points. Unique variable length reference code, consisting of the
-letter 'V', followed by up to 10 digits. (i.e. V1234567890, V1, etc.)}
-
-\item{start_release_date}{Release date of vector data. The returned data
-will have been released on or after this date. The release date may lag
-behind the most recent reference date of the data by months or years.}
-
-\item{end_release_date}{Release date of vector data. The returned data
-will have been released on or before this date. The release date may lag
-behind the most recent reference date of the data by months or years.}
+\item{vectorIds}{Vector is a short identifier to refer to a time series of
+data points. Unique variable length reference code, consisting of up to 10
+digits. (i.e. 1234567890, 1, etc.)}
 }
 \value{
 An httr response object
